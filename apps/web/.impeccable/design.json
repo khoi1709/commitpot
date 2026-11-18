@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T08:36:00.000Z",
+  "title": "Design System: CommitPot",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#242039",
+        "tonalRamp": ["#0f0d1d", "#18152a", "#242039", "#3c3654", "#5a536d", "#7f788d", "#aca8b9", "#ecebf0"]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#665f79",
+        "tonalRamp": ["#292436", "#403951", "#665f79", "#7a7389", "#928ca0", "#b1acbb", "#cecbd4", "#eeedf1"]
+      },
+      "brand": {
+        "role": "primary",
+        "displayName": "CommitPot Indigo",
+        "canonical": "#5130b5",
+        "tonalRamp": ["#1d1045", "#2d1769", "#3e218f", "#5130b5", "#6946cd", "#896ee0", "#b4a0ef", "#eeeafd"]
+      },
+      "brand-dark": {
+        "role": "primary",
+        "displayName": "Deep Indigo",
+        "canonical": "#3e218f",
+        "tonalRamp": ["#160c33", "#251257", "#3e218f", "#5938a8", "#7659c3", "#9b86d9", "#c5b8e9", "#f1effa"]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Cool Ground",
+        "canonical": "#f4f3f9",
+        "tonalRamp": ["#4b4756", "#77727e", "#aca8b1", "#d2cfda", "#f4f3f9", "#f7f6fb", "#faf9fd", "#ffffff"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Lilac Line",
+        "canonical": "#e2deed",
+        "tonalRamp": ["#575063", "#8b8399", "#b7b1c4", "#cec9db", "#e2deed", "#ebe8f3", "#f4f2f8", "#fbfaff"]
+      },
+      "subtle": {
+        "role": "neutral",
+        "displayName": "Lilac Subtle",
+        "canonical": "#eeebf7",
+        "tonalRamp": ["#514965", "#827a9a", "#b3abc7", "#d0c9e1", "#eeebf7", "#f3f1fa", "#f8f7fc", "#ffffff"]
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Confirmed Green",
+        "canonical": "#235b3c",
+        "tonalRamp": ["#0e2518", "#153a24", "#235b3c", "#3d7c5a", "#66a57e", "#93c4a4", "#c2e2cb", "#f0f9f2"]
+      },
+      "error": {
+        "role": "tertiary",
+        "displayName": "Error Crimson",
+        "canonical": "#9b263f",
+        "tonalRamp": ["#3a0d18", "#5a1729", "#9b263f", "#b94b61", "#d17a8b", "#e3aab5", "#f3d4da", "#fceff1"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "White Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#292633", "#655f70", "#9e99aa", "#cbc8d0", "#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+      },
+      "focus-ring": {
+        "role": "tertiary",
+        "displayName": "Focus Ring",
+        "canonical": "#a78bed",
+        "tonalRamp": ["#2e2054", "#523c91", "#8065c4", "#a78bed", "#b8a4f0", "#cbbcf4", "#e1d9fb", "#f6f3ff"]
+      },
+      "selection": {
+        "role": "tertiary",
+        "displayName": "Selection Lilac",
+        "canonical": "#d9cbff",
+        "tonalRamp": ["#3a2e64", "#635099", "#8b74cf", "#b09bec", "#d9cbff", "#e5dcff", "#f1edff", "#fcfbff"]
+      },
+      "selection-ink": {
+        "role": "neutral",
+        "displayName": "Selection Ink",
+        "canonical": "#24184b",
+        "tonalRamp": ["#0e091d", "#17102f", "#24184b", "#3d2f6d", "#5a4b85", "#7b6ca7", "#aea5c6", "#efedf5"]
+      },
+      "control-line": {
+        "role": "neutral",
+        "displayName": "Control Line",
+        "canonical": "#cbc5da",
+        "tonalRamp": ["#403b50", "#6a6279", "#938da0", "#aaa4b6", "#cbc5da", "#d8d3e2", "#e8e4ed", "#f7f6fa"]
+      },
+      "placeholder": {
+        "role": "neutral",
+        "displayName": "Placeholder Ink",
+        "canonical": "#7a7389",
+        "tonalRamp": ["#312c3b", "#4d4658", "#7a7389", "#8c8599", "#a59fad", "#beb9c3", "#d6d3d9", "#f2f1f3"]
+      },
+      "network-lime": {
+        "role": "tertiary",
+        "displayName": "Network Lime",
+        "canonical": "#c8f298",
+        "tonalRamp": ["#283419", "#526b2e", "#809f4c", "#a9ce70", "#c8f298", "#d8f5b5", "#e8fad2", "#f9fff3"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Page Display",
+        "purpose": "Page titles and the primary entry point of a view."
+      },
+      "headline": {
+        "displayName": "Workspace Headline",
+        "purpose": "Main workspace headings and prominent section titles."
+      },
+      "body": {
+        "displayName": "Workhorse Body",
+        "purpose": "Default interface copy and readable event explanation."
+      },
+      "label": {
+        "displayName": "Control Label",
+        "purpose": "Form labels and compact control descriptors."
+      }
+    },
+    "shadows": [
+      {
+        "name": "selected-event-lift",
+        "value": "0 3px 12px #3b216808",
+        "purpose": "Barely visible separation for the selected event card."
+      },
+      {
+        "name": "workspace-ambient",
+        "value": "0 8px 36px #33225105",
+        "purpose": "Low-opacity ambient separation around the event workspace."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-transition",
+        "value": "background .16s ease, box-shadow .16s ease",
+        "purpose": "Short state transition for native controls."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media(prefers-reduced-motion:reduce){transition:none!important;animation:none!important;scroll-behavior:auto!important}",
+        "purpose": "Removes transitions and animations when the user requests reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-desktop",
+        "value": "1500px",
+        "purpose": "Adds wider event and personal panel spacing."
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1250px",
+        "purpose": "Reduces rail, gutter, event-picker, and panel dimensions."
+      },
+      {
+        "name": "single-column-shell",
+        "value": "1000px",
+        "purpose": "Hides the brand rail and shows the mobile brand in the top bar."
+      },
+      {
+        "name": "phone",
+        "value": "760px",
+        "purpose": "Turns the event picker and event body into phone-friendly stacks."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Advances an event or account action with the indigo accent.",
+      "html": "<button class=\"ds-btn-primary\">Commit <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; justify-content:center; gap:16px; min-height:44px; padding:10px 15px; border:1px solid var(--brand); border-radius:8px; background:var(--brand); color:#fff; font:500 14px/1.6 'Be Vietnam Pro',sans-serif; cursor:pointer; transition:background .16s ease,box-shadow .16s ease; } .ds-btn-primary:hover:not(:disabled) { background:var(--brand-dark); } .ds-btn-primary:focus-visible { outline:3px solid #a78bed; outline-offset:3px; } .ds-btn-primary:active:not(:disabled) { transform:translateY(1px); } .ds-btn-primary:disabled { cursor:not-allowed; opacity:.48; }"
+    },
+    {
+      "name": "Neutral Control",
+      "kind": "button",
+      "refersTo": "button-control",
+      "description": "Native secondary action used for controls, receipts, and fallback paths.",
+      "html": "<button class=\"ds-btn-control\">Refresh</button>",
+      "css": ".ds-btn-control { min-height:44px; padding:10px 15px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); font:500 14px/1.6 'Be Vietnam Pro',sans-serif; cursor:pointer; transition:background .16s ease,box-shadow .16s ease; } .ds-btn-control:hover:not(:disabled) { background:var(--subtle); } .ds-btn-control:focus-visible { outline:3px solid #a78bed; outline-offset:3px; } .ds-btn-control:disabled { cursor:not-allowed; opacity:.48; }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Labelled native field for event and account data.",
+      "html": "<label class=\"ds-field\">Deposit<input placeholder=\"10\" /></label>",
+      "css": ".ds-field { display:block; color:var(--ink); font:500 13px/1.6 'Be Vietnam Pro',sans-serif; } .ds-field input { display:block; width:100%; min-height:46px; margin-top:8px; padding:11px 12px; border:1px solid #cbc5da; border-radius:8px; background:#fff; color:var(--ink); font:400 14px/1.6 'Be Vietnam Pro',sans-serif; caret-color:var(--brand); } .ds-field input::placeholder { color:#7a7389; } .ds-field input:focus-visible { outline:3px solid #a78bed; outline-offset:3px; }"
+    },
+    {
+      "name": "Event Card",
+      "kind": "card",
+      "refersTo": "event-card",
+      "description": "Compact event-list item showing id, amount, and phase.",
+      "html": "<button class=\"ds-event-card\"><span>#01</span><strong>Event 1</strong><small>10 Test USDC</small><em>Registration</em></button>",
+      "css": ".ds-event-card { display:flex; flex-direction:column; align-items:flex-start; gap:4px; width:100%; min-height:140px; padding:17px 18px; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); text-align:left; font-family:'Be Vietnam Pro',sans-serif; cursor:pointer; } .ds-event-card:hover { background:var(--subtle); } .ds-event-card:focus-visible { outline:3px solid #a78bed; outline-offset:3px; } .ds-event-card strong { margin:3px 0; font-size:13px; } .ds-event-card span,.ds-event-card small,.ds-event-card em { font-size:11px; font-style:normal; color:var(--muted); } .ds-event-card em { margin-top:7px; font-size:10px; }"
+    },
+    {
+      "name": "Event Workspace",
+      "kind": "card",
+      "refersTo": "workspace-card",
+      "description": "White bounded workspace for phase, event facts, and personal action.",
+      "html": "<section class=\"ds-workspace-card\"><h2>Event <span>#01</span></h2><p>Registration</p><div class=\"ds-workspace-rule\"></div></section>",
+      "css": ".ds-workspace-card { min-height:240px; overflow:hidden; border:1px solid var(--line); border-radius:12px; background:#fff; color:var(--ink); box-shadow:0 8px 36px #33225105; } .ds-workspace-card h2 { margin:0; padding:26px 29px 9px; font:600 22px/1.4 'Be Vietnam Pro',sans-serif; letter-spacing:-.025em; } .ds-workspace-card h2 span { color:#8b809d; font-weight:400; } .ds-workspace-card p { margin:0; padding:0 29px 18px; color:var(--muted); font-size:11px; } .ds-workspace-rule { border-top:1px solid var(--line); }"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Desktop top bar for language and wallet controls; the shell hides the rail on smaller widths.",
+      "html": "<nav class=\"ds-top-nav\"><span>Event</span><div><button aria-pressed=\"true\">EN</button><button>VI</button><button class=\"ds-wallet\">Connect wallet</button></div></nav>",
+      "css": ".ds-top-nav { display:flex; align-items:center; justify-content:space-between; min-height:88px; padding:0 42px; border-bottom:1px solid var(--line); background:#fff; color:var(--muted); font:400 13px/1.6 'Be Vietnam Pro',sans-serif; } .ds-top-nav > div { display:flex; align-items:center; gap:8px; } .ds-top-nav button { min-height:44px; padding:8px; border:0; border-radius:8px; background:transparent; color:var(--muted); font:500 12px/1.6 'Be Vietnam Pro',sans-serif; cursor:pointer; } .ds-top-nav button[aria-pressed=\"true\"] { background:var(--subtle); color:var(--brand); font-weight:600; } .ds-top-nav .ds-wallet { border:1px solid var(--line); padding:10px 15px; color:var(--ink); } .ds-top-nav button:focus-visible { outline:3px solid #a78bed; outline-offset:3px; }"
+    },
+    {
+      "name": "Event Phase Rail",
+      "kind": "custom",
+      "refersTo": "phase-rail",
+      "description": "Three-stage lifecycle marker for registration, check-in, and closing.",
+      "html": "<ol class=\"ds-phase-rail\"><li class=\"reached\"><span><svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"><path d=\"m5 12 4 4L19 6\"/></svg></span><strong>Registration</strong><time>12 Jun, 18:00</time></li><li><span>2</span><strong>Check-in</strong><time>12 Jun, 19:00</time></li></ol>",
+      "css": ".ds-phase-rail { display:flex; flex-direction:column; gap:22px; margin:0; padding:0; list-style:none; font-family:'Be Vietnam Pro',sans-serif; } .ds-phase-rail li { display:grid; grid-template-columns:24px 1fr; column-gap:12px; align-items:start; color:var(--muted); } .ds-phase-rail li > span { display:grid; place-items:center; width:24px; height:24px; border:1px solid var(--line); border-radius:50%; color:var(--muted); font-size:11px; } .ds-phase-rail li.reached > span { border-color:var(--success); color:var(--success); } .ds-phase-rail strong,.ds-phase-rail time { grid-column:2; } .ds-phase-rail strong { font-size:13px; color:var(--ink); } .ds-phase-rail time { margin-top:3px; font-size:11px; color:var(--muted); }"
+    },
+    {
+      "name": "Personal Status Panel",
+      "kind": "custom",
+      "refersTo": "personal-panel",
+      "description": "Separate account state and action panel that stacks below the event on phones.",
+      "html": "<aside class=\"ds-personal-panel\"><h3>Your status</h3><p class=\"ds-state\"><svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"><path d=\"m5 12 4 4L19 6\"/></svg> Joined</p><button class=\"ds-btn-primary\">Show QR</button></aside>",
+      "css": ".ds-personal-panel { min-width:0; padding:26px 20px; border-left:1px solid var(--line); background:#faf9fd; color:var(--ink); font-family:'Be Vietnam Pro',sans-serif; } .ds-personal-panel h3 { margin:0 0 20px; font-size:13px; } .ds-personal-panel .ds-state { display:flex; gap:7px; align-items:center; margin:20px 0; color:var(--brand); font-size:11px; } @media (max-width:760px) { .ds-personal-panel { padding:25px 22px; border-top:1px solid var(--line); border-left:0; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Accountable Event Ledger",
+    "overview": "CommitPot is an Operate surface: a compact, code-led workspace that makes an event commitment legible before a wallet prompt. The incumbent build translates the student-association direction into a saturated indigo rail, white working surfaces, cool lilac context, dark ink, and a restrained status vocabulary. No images or reference compositions are adopted; the interface earns identity through event phases, exact amounts, native controls, and receipts.\n\nThe density is workhorse rather than decorative. A visible phase rail carries the lifecycle from registration through check-in to settlement, while the personal status panel keeps account action distinct from shared event facts. English and Vietnamese use the same local Be Vietnam Pro family and the same measured hierarchy.",
+    "keyCharacteristics": [
+      "Indigo brand rail with white and cool-lilac work surfaces.",
+      "State-first event lifecycle and exact Test USDC amounts.",
+      "Compact readable density with native labelled controls.",
+      "Personal status/action panel that stacks below the event workspace on phones."
+    ],
+    "rules": [
+      {
+        "name": "The State-First Rule",
+        "body": "Use color to reinforce a known lifecycle or account state; never let decoration outrank the event phase or exact amount.",
+        "section": "colors"
+      },
+      {
+        "name": "The Indigo Anchor Rule",
+        "body": "Keep saturated indigo concentrated in brand navigation, primary action, and active state roles against quiet working surfaces.",
+        "section": "colors"
+      },
+      {
+        "name": "The Workhorse Sans Rule",
+        "body": "Keep the local Be Vietnam Pro family for all UI copy, including translated labels and account addresses; do not introduce a decorative display face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Depth Rule",
+        "body": "Prefer tonal layering and borders at rest; shadows remain low-opacity and structural rather than expressive.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep the indigo, white, cool-lilac, dark-ink palette and use semantic green/crimson only for confirmed status or errors.",
+      "Do preserve Be Vietnam Pro local font files and the same hierarchy for EN and VI.",
+      "Do keep native labelled controls, minimum 44px buttons, 46px fields, visible keyboard focus, and the reduced-motion behavior already implemented.",
+      "Do keep exact deposit amounts, event phase, and personal status ahead of decorative treatment.",
+      "Do preserve the phone sidepanel stack: event facts first, personal status/action second."
+    ],
+    "donts": [
+      "Don't add trading-dashboard decoration, yield imagery, ticket-paper costume, or adopted reference compositions.",
+      "Don't treat a small desktop label sizing/fit defect as a normative rule; it remains a finish-review item, not a token.",
+      "Don't claim accessibility certification from the observed focus, native-control, or reduced-motion rules; the final finish verdict accepts only the two scoped receipt/density corrections.",
+      "Don't replace native controls with glyph-only or unlabeled visual affordances."
+    ]
+  }
+}

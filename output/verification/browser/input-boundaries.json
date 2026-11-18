@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "steps": [
+    "Exact token precision rejected before wallet request",
+    "Untrusted QR URL rejected without navigation or candidate",
+    "Explicit human-presence attestation required before signing",
+    "Language change preserves verifier candidate and scanned data",
+    "390×640 verifier layout remains within viewport width"
+  ],
+  "errors": [],
+  "mockOnly": true,
+  "viewport": "390x640"
+}

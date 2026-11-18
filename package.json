@@ -1,0 +1,11 @@
+{
+  "name": "commitpot",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev": "pnpm --filter @commitpot/web dev",
+    "build": "pnpm --filter @commitpot/web build",
+    "typecheck": "pnpm --filter @commitpot/web typecheck",
+    "test": "pnpm --filter @commitpot/web test"
+  }
+}

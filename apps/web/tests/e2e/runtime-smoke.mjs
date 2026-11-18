@@ -1,0 +1,61 @@
+import { chromium } from '@playwright/test';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+const output = resolve(process.cwd(), '../../output/verification/browser');
+await mkdir(output, { recursive: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, locale: 'en-GB' });
+const page = await context.newPage();
+const errors = [];
+page.on('pageerror', error => errors.push(error.message));
+const steps = [];
+const check = async (name, fn) => { await fn(); steps.push(name); };
+try {
+  await page.goto('http://localhost:3100', { waitUntil: 'networkidle', timeout: 60000 });
+  await check('Initial page renders labelled mock mode', async () => { await page.getByRole('heading', { name: 'No commitments yet' }).waitFor(); });
+  await check('Load example through normal UI', async () => { await page.getByRole('button', { name: 'Load a five-person example', exact: true }).last().click(); await page.getByRole('heading', { name: 'Commitment pot #1' }).waitFor(); await page.getByRole('button', { name: 'Move to next phase', exact: true }).waitFor(); });
+  await page.screenshot({ path: resolve(output, 'desktop.png'), fullPage: true });
+  await check('Switch to Vietnamese without resetting event', async () => { await page.getByRole('button', { name: 'VI', exact: true }).click(); await page.getByRole('heading', { name: 'Quỹ cam kết #1' }).waitFor(); if (await page.locator('html').getAttribute('lang') !== 'vi') throw new Error('Missing vi language'); });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: resolve(output, 'mobile-vi.png'), fullPage: true });
+  const width = await page.evaluate(() => ({ document: document.documentElement.scrollWidth, viewport: innerWidth }));
+  if (width.document > width.viewport) throw new Error('Mobile horizontal overflow: ' + JSON.stringify(width));
+  await page.getByRole('button', { name: 'EN', exact: true }).click();
+  await check('Enter real mock check-in window', async () => { await page.getByRole('button', { name: 'Move to next phase', exact: true }).click(); await page.locator('.phase-label').filter({ hasText: 'Check-in open' }).waitFor(); });
+  await page.locator('.personal-panel select').selectOption('0x0000000000000000000000000000000000000006');
+  await page.getByRole('button', { name: 'Check-in desk', exact: true }).click();
+  for (let i = 1; i <= 4; i++) {
+    const participant = '0x' + i.toString(16).padStart(40, '0');
+    await page.getByLabel('Participant QR contents', { exact: true }).fill(JSON.stringify({ v: 1, potId: '1', participant }));
+    await page.getByRole('button', { name: 'Check participant', exact: true }).click();
+    await page.getByRole('checkbox', { name: 'I confirm this person is physically present' }).check();
+    await page.getByRole('button', { name: 'Sign and record attendance', exact: true }).click();
+    await page.locator('.candidate').waitFor({ state: 'detached' });
+  }
+  steps.push('Four QR attestations via verifier UI, no state injection');
+  await page.screenshot({ path: resolve(output, 'mobile-verifier.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Move to next phase', exact: true }).click();
+  await page.getByRole('button', { name: 'Commitment', exact: true }).click();
+  await page.getByRole('button', { name: 'Finalize results', exact: true }).click();
+  await page.locator('.phase-label').filter({ hasText: 'Settled' }).waitFor();
+  await page.locator('.personal-panel select').selectOption('0x0000000000000000000000000000000000000001');
+  await page.getByRole('button', { name: 'Claim payout', exact: true }).waitFor();
+  const entitlement = await page.locator('.entitlement>strong').innerText();
+  if (!entitlement.includes('12.5')) throw new Error('Wrong entitlement: ' + entitlement);
+  await page.getByRole('button', { name: 'Claim payout', exact: true }).click();
+  await page.locator('.personal-state').filter({ hasText: 'Payout claimed' }).waitFor();
+  steps.push('Finalize and claim exact 12.5 through UI');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.locator('.personal-state').filter({ hasText: 'Payout claimed' }).waitFor();
+  await page.locator('.activity li').filter({ hasText: 'Claim payout' }).waitFor();
+  steps.push('Reload retains claimed state and matching confirmed receipt history');
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({ path: resolve(output, 'desktop-settled.png'), fullPage: true });
+  if (errors.length) throw new Error('Runtime errors: ' + errors.join('; '));
+  await writeFile(resolve(output, 'report.json'), JSON.stringify({ status: 'passed', steps, errors, nativeBrowser: 'Microsoft Edge, isolated fresh context', url: page.url(), mockOnly: true, noStateInjection: true }, null, 2));
+  console.log(JSON.stringify({ status: 'passed', steps, output }));
+} catch (error) {
+  await page.screenshot({ path: resolve(output, 'failure.png'), fullPage: true }).catch(() => {});
+  await writeFile(resolve(output, 'report.json'), JSON.stringify({ status: 'failed', steps, errors, error: String(error) }, null, 2));
+  throw error;
+} finally { await browser.close(); }

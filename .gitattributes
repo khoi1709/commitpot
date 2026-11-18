@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.png -text
+# Preserve the byte-exact downloaded source documents and their Markdown hard breaks.
+docs/sources/*.md -text whitespace=-blank-at-eol

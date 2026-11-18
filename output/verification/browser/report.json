@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "steps": [
+    "Initial page renders labelled mock mode",
+    "Load example through normal UI",
+    "Switch to Vietnamese without resetting event",
+    "Enter real mock check-in window",
+    "Four QR attestations via verifier UI, no state injection",
+    "Finalize and claim exact 12.5 through UI",
+    "Reload retains claimed state and matching confirmed receipt history"
+  ],
+  "errors": [],
+  "nativeBrowser": "Microsoft Edge, isolated fresh context",
+  "url": "http://localhost:3100/?pot=1",
+  "mockOnly": true,
+  "noStateInjection": true
+}

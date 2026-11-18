@@ -1,0 +1,114 @@
+﻿[
+    {
+        "sha256":  "c8c622a202348e4fe8028f688fb770de4d66c15883fd08257d7701999317d47c",
+        "path":  "apps/web/src/app/globals.css"
+    },
+    {
+        "sha256":  "7b7caf762801a84cd851981fdf5b140f06dc0d2092cd05152fb7253803a82fdc",
+        "path":  "apps/web/src/app/layout.tsx"
+    },
+    {
+        "sha256":  "5dccc828d43a2360bdc7175e0070c28bf685757c1ad7fd269ea36e247f25b584",
+        "path":  "apps/web/src/app/page.tsx"
+    },
+    {
+        "sha256":  "4737e48f1c66fe0ef496649fa1c7e736b50f501ac989b2b952420ecb18faac55",
+        "path":  "apps/web/src/application/pending.ts"
+    },
+    {
+        "sha256":  "c5be034f4b4a72f53144da0d8ba2de8a60ed4ee946d9a21133711dab91b32bcb",
+        "path":  "apps/web/src/application/runtime.ts"
+    },
+    {
+        "sha256":  "7329dff5dafb6f328f2d7c22a96dae5733ff636bbfc70f0486f8564421c0db3d",
+        "path":  "apps/web/src/domain/amounts.ts"
+    },
+    {
+        "sha256":  "0805fb2dc8e87797639e7f9895b5bb86240bc5bbc6c91fb66ff5a6497abbabd3",
+        "path":  "apps/web/src/domain/errors.ts"
+    },
+    {
+        "sha256":  "adb03c44f38f3e68239403409821c5f41d261703bdf4db6a1191cc43f0c24adc",
+        "path":  "apps/web/src/domain/index.ts"
+    },
+    {
+        "sha256":  "fa53c64033431a48c758abd206f6e9a6a8456c6debf27b74a303f03f2c47c30b",
+        "path":  "apps/web/src/domain/ports.ts"
+    },
+    {
+        "sha256":  "1b59f1020904ea37bf63274e94bb292215acdfc935b3c7ec248a49524c1f0cfc",
+        "path":  "apps/web/src/domain/rules.ts"
+    },
+    {
+        "sha256":  "c930bf4e49da6471fe35b1bca28e41fa8dbaeb3a75c5167e018e5d4bc7fe3071",
+        "path":  "apps/web/src/domain/types.ts"
+    },
+    {
+        "sha256":  "970e75cdcafa30a9431a6b15fa20d0ebf9d022bbb0b3c39e1bda9b6b2fe168ba",
+        "path":  "apps/web/src/generated/commitPotAbi.ts"
+    },
+    {
+        "sha256":  "0c43ffcfe678dc47ce370e3d6c6f986a504c8dabe66ca197a08232129c6ccbb7",
+        "path":  "apps/web/src/i18n/messages.ts"
+    },
+    {
+        "sha256":  "686501f2f2c34c0b1a7c5fcc88291519135fcbe1def2e38ca40950c7521ddbb1",
+        "path":  "apps/web/src/infrastructure/avalanche/browser.ts"
+    },
+    {
+        "sha256":  "bce2b5ce15900c1ab59bf156cd356c0c269a7bfdcdba50b11f6c62aa2edcfdad",
+        "path":  "apps/web/src/infrastructure/avalanche/repository.ts"
+    },
+    {
+        "sha256":  "b3643b6feb5bf55afeb5abd31459d49f2f4d2c336c1fe44d74c50104a89ecd11",
+        "path":  "apps/web/src/infrastructure/mock/index.ts"
+    },
+    {
+        "sha256":  "2941870b13cdf3fd31d3e4ee26bdd3da6efb9ee548c552532c3f5eed40734d7b",
+        "path":  "apps/web/src/infrastructure/qr/index.ts"
+    },
+    {
+        "sha256":  "36d99e1ca84af77f2e59394738103478ea85f0dce282e1530f058dbd2fcac4fa",
+        "path":  "apps/web/src/presentation/CommitPotApp.tsx"
+    },
+    {
+        "sha256":  "292766cd6410984894d924050a8ae945b46727221369ff355f6342a14558f9f2",
+        "path":  "packages/contracts/src/CommitPot.sol"
+    },
+    {
+        "sha256":  "13f5339e4d263d797857238bf762ecb5075b1ff2086485f7cbe92c65b69530a4",
+        "path":  "packages/contracts/src/EIP712AttendanceVerifier.sol"
+    },
+    {
+        "sha256":  "1c2be9e010ab8a7875414da453c24afd63c3b90bfb2fba8ffab7de709837828b",
+        "path":  "packages/contracts/src/EqualSplitStrategy.sol"
+    },
+    {
+        "sha256":  "0ef07e92ad369ea7b293953836855e7a548c5897f2356e0922b4bf815f030d4d",
+        "path":  "packages/contracts/src/IAttendanceVerifier.sol"
+    },
+    {
+        "sha256":  "a80145fccf311853f9068c690b3be2f918ab18c962e9381d5d843704f0bb2794",
+        "path":  "packages/contracts/src/IPayoutStrategy.sol"
+    },
+    {
+        "sha256":  "5592b356c925b4b57ee2856bf825a806c7f59ac225f196b8bb5dbcbf3ed94def",
+        "path":  "packages/contracts/src/LocalTestUSDC.sol"
+    },
+    {
+        "sha256":  "27e5ce18670221814acd3393709d8b4e1a7e675348fd38e19831a835f154f6d4",
+        "path":  "packages/contracts/src/PotTypes.sol"
+    },
+    {
+        "sha256":  "a4181b146f0cdc7ebdf876ac3b31cb201c082f8c0ba975f012f412fe8139cbe1",
+        "path":  "packages/contracts/test/unit/CommitPotBounds.t.sol"
+    },
+    {
+        "sha256":  "ccd79ff695fca8b17fead7c3c82b102d7d0b9f9c12bf6cfec8ba2b88017c2ad9",
+        "path":  "packages/contracts/test/unit/CommitPotLifecycle.t.sol"
+    },
+    {
+        "sha256":  "3dd4903782487a61b413733075129e5281cdc1d91e311d26c0e3c64f77997ac2",
+        "path":  "packages/contracts/test/unit/CommitPotProofs.t.sol"
+    }
+]

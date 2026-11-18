@@ -1,0 +1,16 @@
+# Independent source review adjudication
+
+Fresh reviewer3b9 readactualsource and produced SOURCE_REVIEW.md. This is a bounded source review, not formal contractsecurity or runtimecertification.
+
+- **M1 accepted and fixed:** runtime selection now requires explicit NEXT_PUBLIC_USE_MOCK true orfalse. Missing/typo config raisesINVALID_CONFIG instead of selectingdemo. Localdevelopment uses ignored.env.local with explicittrue; exampleenvdocumented. Nonmockfactory validateschain/code/supportedtoken/decimals and neverfallbacks.
+- **M2 accepted and fixed:** reconcile nowchecksactualconnectedaddress against pending.account aswellaschain/core; mismatchpreservesrecord andrequests reconnection. Submissioncapturesactualwalletconnection immediatelybeforeintent and rejectsstaleReactaccount/chain.
+
+Additional receipt/pending fixes: persistentoperationkind codestranslatewithcurrentlocale; hashesrecorded inReactbeforestoragewrite so quotaerrorretainsinmemoryreference; synchronousoperationlock prevents rapidduplicateclick; knownrevertedreceipts clear pending whileunknowntransportpreserves it; failedattendance submissionretainscandidate; receiptlookupdecodesdestination/operation and requiresmatchingcoreeventorapprovedspender before treating asappspecificsuccess. Publicreceiptlookupdoesnotauthorizefundtransfer.
+
+Fresh source recheck448721fb resolvedM1/M2 at actualsourcepaths. Unit10/typecheck0/actualchainintegration1/browsermock7andfullbrowserchain4passedaftertheserecoveryfixes. Noformal-auditclaim.
+
+## Finish review fixes
+
+Independent finishreviewbf349 returned **fix**, identifying emptyactivityafterreloaddespiteclaimedstateandunnecessarydesktopheightfromalwaysopenQR. Acceptedboth: persistonlyactualconfirmedreceipthistoryscopedbychain/core; operationkindkeysrenderincurrentlocale; nofakeor"seeded"receiptinvented. PersonalsectionQRnowusesnative44pxdetails,opensautomaticallyduringcheckin,andremainsmanuallyaccessibleearlier. A fresh UI journey asserts claimedstate ANDmatchingreceiptrow afterreload; revised desktopandphonecaptures are sent for a bounded verdict,notselfcertified. Sourcehashmanifestwillberecapturedafterthisexplicitrepairbatch;earlierread-onlychecksnapshotisqualifiedifitoverlappedthesechanges.
+
+All priorfailuresretained inexecutionfindings.
