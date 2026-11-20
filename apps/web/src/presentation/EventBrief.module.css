@@ -1,0 +1,40 @@
+.brief {
+  min-width: 0;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.title {
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.brief p {
+  max-width: 70ch;
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
+
+.brief .identity {
+  font-variant-numeric: tabular-nums;
+}
+
+.brief .disclosure {
+  margin-top: 1rem;
+  color: var(--ink);
+}
+
+.disclosure strong {
+  font-weight: 500;
+}
+
+.brief .authority {
+  margin-bottom: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}

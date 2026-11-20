@@ -1,0 +1,20 @@
+name: Windows offline checks
+
+on:
+  workflow_dispatch:
+    inputs: {}
+
+permissions:
+  contents: read
+
+jobs:
+  provisioning-gate:
+    # This job intentionally fails closed until an isolated offline Windows runner is provisioned.
+    # Never expose a persistent self-hosted runner to pull_request or arbitrary branch workflows.
+    if: github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    steps:
+      - name: Require isolated offline runner provisioning
+        shell: powershell
+        run: |
+          throw 'Provisioning gate: an isolated offline Windows runner with the verified local Node/pnpm, Foundry, dependencies and fixtures is not provisioned for this workflow. No repository code was checked out or executed; configure a clean isolated runner before enabling checks.'

@@ -1,0 +1,24 @@
+# Research synthesis — accepted findings and limitations
+
+## Scope and method
+
+All specialists requested by the human ran on discovered **cliproxyapi/astra/max**; no application writes, cloned competitor trees, opponent execution, new tests/builds, wallet actions or public deployment in this pass. Six roles total: five scoped discovery/product/technical specialists and one fresh independent adjudicator. Each owns one research report, no recursive managers.
+
+Public association is self-described, not a verified submitted/finalist roster. Official submission data is private by design. OurHEAD is fixedFEA386; competitorSHAs/trees/deepcode unavailable aftersharedGitHubanonymous403. Thisconstraint was not bypassed. FullREADMEobservationscachedbythelead andordinarypublicpagereads informproduct/proofpatterns—notstatementsopponentsaresecure/insecure/fullyfunctional. Opponenttestcountsarenotoursrerun. No10/10,perfect,winningorrelativerankclaim.
+
+## Worker contribution adjudicated
+
+- **Socialfinance0d0:** closestoverlapStudyStakebutcoursecompletion/principalreturnsubjectvaultloss≠offlineattendanceforfeiture; AvaHuilocalizedconcretestoryuseful,absolute0%risk/yield/latencyclaimsnotcopied. Opponentcodecomparisonexplicitlyincomplete.
+- **Judgecf55:** reuseexistingno-walletadapter; historicalpositive+negativeproofsamepot; showreceipt/source/networkidentity; currentalreadyclaimedpositiveroutecouldrevertcorrectly,notfalsefailure. Nativepage/READMEproofpresentationnotindependentRPCvalidation.
+- **Onboarding66e:** preserveindigo/ENVI,rolefocusphoneverifier,nativegas/missingwalletrecovery,scan-candidateinvalidation; SealedArenaeventassociationunconfirmedandtitleonlyresponsecan'tcompareUX. Itsdegradedbannerreferstoabrief-limitedUXsubpass,notwholecompetitivepassbeingunreportedcritique;noformalImpeccabledetector/livecritiqueclaim.
+- **Technicaleb38:** stage-aware signing/simulation/broadcast classification,exactintent+receiptcontext,storagequarantine/conditionalclear,sharedconfirmedactivityandindependentpublicreads. Acceptedassource-groundedfrontendgaps;walletpromptinterleavingsandfailuresemanticsrequiretests,noestablishedfunddiversionorcorecontrolbypass.
+- **Product9bcb:** staffedevent/voluntaryconsent,realpilotwithdenominators,noinventedcausalno-showreduction. 'Your events'currentlyglobalrecentfeed—fixlabelnotpretendownership. Humanmustdecidepenaltyfairness/cancellation/verifierfailuremetadataaccessibilitychanges.
+- **Priorityadjudicator524:** actualreportreadsupportsboundedF1–F6frontend/recoverygapsnotcorefundsvulnerability;recommends7highestimpactactionsandkeepspublicFujicriticalgated. Provenancechallengeaccepted: leadattachedalreadyexistinglaternonGitHubAvaHui/AgentLeashobservationsinEVIDENCE_CACHEinstead ofnewrequestsorpretendearliercachecontainedthem. Othercorrectionsretained:nobaretestcount/rankingclaim,preserveexistingcontext+receiptvalidation,minimalrecoveryfieldsnotframework. Completedclosingnoticecollectedandread;all6requiredspecialistsjoinedbeforefinal.
+
+## Minimality corrections
+
+Receiptvalidationalreadyexists(target,operation,eventclass),missingpieceiscompareexpectedintentarguments/sender/pot. Reconcilebugismissinglocalhistoryentry,notlostonchainreceipt. Normalactivitystoragewritealreadycaught;pendingkeyread/removal/overwriting isdecisivegap. Read-onlyruntimealreadyexists; improvethepartialfailurefanout/notaddsecondadapter. QRisnotpresence/ownershipproof, andfixingUIbindingsdoesnotremovehumanverifiertrust. PublicFuji/HTTPSproofiscriticalbuthuman-gatedrelease,notlastoptionalpolishorimplicitpermission.
+
+## Source/working-tree integrity
+
+Onlydocs/competitive-review isnew/untrackedduringresearch; gitdiffsourceempty,HEADfea386bdde0bf6051af1116790f0762609dcf891unchanged. No source/tests/config/lockfile changes. No commit/push performed. ExistingmockUIcapturesarehistorical,becausecurrentlistenerabsent; notfreshUIruntimeverification. CurrentpublicGitHubvisibility/pubstateisverifiedpriorwork,somelocalhistoricdocsnotupdatedandmustnotbemistakenforunpublishedstatus.

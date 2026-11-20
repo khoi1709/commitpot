@@ -16,8 +16,10 @@ describe('exact financial rules', () => {
   it('parses and formats exact token units', () => {
     expect(parseTokenAmount('12.500001', 6)).toBe(12_500_001n);
     expect(formatTokenAmount(16_666_667n, 6)).toBe('16.666667');
-    for (const invalid of ['-1', '+1', '1e6', ' 1', '01', '1.0000001', '.5', '1.']) expect(() => parseTokenAmount(invalid, 6)).toThrow();
+    for (const invalid of ['-1', '+1', '1e6', ' 1', '01', '1.0000001', '.5', '1.', '1\n', '1\r', '1\u2028', '1\u2029']) expect(() => parseTokenAmount(invalid, 6)).toThrow();
     expect(() => parsePotId('0')).toThrow(); expect(() => parsePotId('01')).toThrow();
+    for (const invalid of ['1\n', '1\r', '1\u2028', '1\u2029']) expect(() => parsePotId(invalid)).toThrow();
+    expect(() => validatePotConfig({ ...pot.config, token: new String(token) as never }, 100)).toThrow();
     expect(parsePotId('1')).toBe(1n);
   });
   it('preserves exact timestamp endpoint semantics', () => {
@@ -32,10 +34,10 @@ describe('exact financial rules', () => {
   });
 });
 describe('personal QR identifier', () => {
-  it('round trips and rejects wrong context and untrusted payloads', () => {
+  it('round trips and rejects wrong context, terminal newlines, and untrusted payloads', () => {
     const data = encodeParticipantQr({ potId: '1', participant: verifier });
     expect(decodeParticipantQr(data, { expectedPotId: '1' }).participant).toBe(verifier);
     expect(() => decodeParticipantQr(data, { expectedPotId: '2' })).toThrow();
-    for (const bad of ['https://example.com', '{"v":2}', 'x'.repeat(1025), JSON.stringify({ v: 1, potId: '01', participant: verifier }), JSON.stringify({ v: 1, potId: '1', participant: verifier, url: 'bad' }), JSON.stringify({ v: 1, potId: '1', participant: '0x' + '0'.repeat(40) })]) expect(() => decodeParticipantQr(bad)).toThrow();
+    for (const bad of ['https://example.com', '{"v":2}', 'x'.repeat(1025), JSON.stringify({ v: 1, potId: '01', participant: verifier }), JSON.stringify({ v: 1, potId: '1', participant: verifier, url: 'bad' }), JSON.stringify({ v: 1, potId: '1', participant: '0x' + '0'.repeat(40) }), JSON.stringify({ v: 1, potId: '1\n', participant: verifier }), JSON.stringify({ v: 1, potId: '1', participant: `${verifier}\n` })]) expect(() => decodeParticipantQr(bad)).toThrow();
   });
 });

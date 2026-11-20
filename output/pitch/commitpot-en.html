@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>CommitPot — English pitch · eight slides</title>
+<style>
+:root { color-scheme: light; --ink:#242039; --muted:#665f79; --brand:#5130b5; --ground:#f4f3f9; --line:#cbc5da; --paper:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--ground); color:var(--ink); font-family:"Segoe UI",Arial,sans-serif; font-size:20px; line-height:1.42; }
+a { color:var(--brand); text-underline-offset:.18em; overflow-wrap:anywhere; }
+a:focus-visible { outline:3px solid var(--brand); outline-offset:4px; }
+::selection { background:#d9cbff; color:#24184b; }
+nav { max-width:1280px; margin:0 auto; padding:18px 28px; font-size:16px; display:flex; gap:24px; flex-wrap:wrap; }
+main { max-width:1280px; margin:0 auto 32px; }
+.slide { background:var(--paper); aspect-ratio:16 / 9; padding:40px 56px 24px; margin-bottom:24px; display:flex; flex-direction:column; gap:18px; border-top:8px solid var(--brand); }
+h1,h2,h3,p,ul,ol { margin:0; }
+h1 { font-size:64px; line-height:1.08; letter-spacing:-.035em; color:var(--brand); }
+h2 { font-size:42px; line-height:1.15; letter-spacing:-.025em; color:var(--brand); text-wrap:balance; }
+h3 { font-size:23px; line-height:1.25; margin-bottom:10px; }
+.lead { font-size:30px; line-height:1.32; max-width:54ch; text-wrap:balance; }
+.statement { font-size:35px; line-height:1.25; max-width:43ch; margin:8px 0; }
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:44px; }
+ul,ol { padding-left:1.2em; }
+li + li { margin-top:9px; }
+.note { font-size:17px; color:var(--muted); }
+.band { background:var(--ground); padding:16px 20px; }
+strong { font-weight:650; }
+table { border-collapse:collapse; width:100%; font-size:20px; font-variant-numeric:tabular-nums; }
+th,td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { font-weight:650; }
+caption { text-align:left; font-size:17px; color:var(--muted); margin-bottom:8px; }
+.equation { font-size:30px; font-weight:650; font-variant-numeric:tabular-nums; }
+footer { margin-top:auto; padding-top:12px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:20px; font-size:15px; color:var(--muted); }
+footer span:last-child { white-space:nowrap; }
+@media (max-width:900px) {
+ body { font-size:18px; }
+ .slide { aspect-ratio:auto; min-height:75vh; padding:28px 24px 20px; gap:20px; }
+ h1 { font-size:48px; } h2 { font-size:32px; } .lead,.statement { font-size:25px; }
+ .cols { grid-template-columns:1fr; gap:24px; }
+ table { font-size:16px; } th,td { padding:8px 5px; }
+ footer { font-size:14px; flex-wrap:wrap; }
+}
+@page { size:A4 landscape; margin:0; }
+@media print {
+ body { background:white; font-size:14pt; }
+ nav { display:none; } main { max-width:none; margin:0; }
+ .slide { width:297mm; height:210mm; aspect-ratio:auto; margin:0; padding:13mm 15mm 9mm; gap:5mm; border-top:2mm solid var(--brand); break-after:page; break-inside:avoid; }
+ .slide:last-child { break-after:auto; }
+ h1 { font-size:43pt; } h2 { font-size:29pt; } h3 { font-size:17pt; }
+ .lead,.statement { font-size:22pt; } .equation { font-size:22pt; }
+ .cols { grid-template-columns:1fr 1fr; gap:12mm; }
+ table { font-size:14pt; } th,td { padding:3mm; }
+ .note,caption { font-size:12pt; } footer { font-size:10pt; padding-top:3mm; }
+ .band { padding:4mm 5mm; } a { color:inherit; }
+}
+</style>
+</head>
+<body>
+<nav aria-label="Document links"><a href="commitpot-vi.html" lang="vi">Tiếng Việt</a><a href="../../docs/demo/README.md">Evidence and print guide</a><a href="../../docs/demo/NARRATED_DEMO.md">Narration source</a></nav>
+<main>
+<section class="slide" aria-labelledby="s1">
+<h1 id="s1">CommitPot</h1>
+<p class="lead">Fixed deposits. Accountable check-in.<br>Inspectable payouts.</p>
+<p class="statement">An opt-in attendance agreement for a staffed workshop—not a promise of better attendance.</p>
+<p>Participants deposit test tokens before the deadline. A named verifier records attendance. The contract applies the agreed payout rules.</p>
+<p class="band"><strong>Test tokens only. No real money.</strong><br>Verified local lifecycle; public Fuji testnet release pending.</p>
+<p class="note">English edition · eight-slide source · <a href="https://github.com/khoi1709/commitpot">Public source repository</a><br>No live hosting, human pilot or measured no-show reduction is claimed.</p>
+<footer><span>CommitPot · local evidence, not a public deployment</span><span>1 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s2">
+<h2 id="s2">A small workshop, a clear bargain</h2>
+<p class="lead">A fictional university club prepares limited seats and materials. Participation—and the deposit—is voluntary.</p>
+<div class="cols">
+<div><h3>Form + bank transfer</h3><ul><li>Familiar attendance registration and payment tools.</li><li>The organizer holds deposits and reconciles refunds or rewards.</li><li>No wallet or testnet-gas onboarding.</li></ul></div>
+<div><h3>CommitPot</h3><ul><li>Deposits follow fixed contract rules, not an organizer withdrawal decision.</li><li>Wallet-specific check-ins and beneficiary payments can be inspected.</li><li>Costs: wallet prompts, AVAX gas and a trusted human verifier.</li></ul></div>
+</div>
+<p class="band">The hypothesis is easier-to-inspect reconciliation—not proven time savings, safer competitors or a causal attendance effect.</p>
+<footer><span>Illustrative scenario; not a recruited event or user study</span><span>2 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s3">
+<h2 id="s3">Agree before depositing</h2>
+<ol><li><strong>Create:</strong> fix token, stake, verifier and registration/check-in deadlines.</li><li><strong>Join:</strong> approve the exact stake, then deposit before registration closes. Gas is separate.</li><li><strong>Check in:</strong> the human verifier inspects the participant, attests presence, signs and submits. A signature alone is not a confirmed check-in.</li><li><strong>Settle:</strong> anyone can finalize after check-in closes. Eligible wallets claim; another caller cannot redirect their payment.</li></ol>
+<p class="band"><strong>If at least one attends:</strong> only verified attendees share all recorded deposits. A no-show forfeits the stake.<br><strong>If nobody attends:</strong> every joined wallet can reclaim its own stake.</p>
+<p class="note">Reward depends on attendance; it is not yield. Integer remainder units go to earliest check-in orders. No cancellation, policy edits, dispute process or verifier replacement.</p>
+<footer><span><a href="../../docs/EXECUTION_CONTRACT.md">Fixed business rules</a></span><span>3 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s4">
+<h2 id="s4">One recorded local outcome</h2>
+<p class="equation">5 × 10 deposited = 50 → 4 × 12.5 paid</p>
+<table><caption>Historical Anvil chain 31337 · pot 3 · six-decimal local test token</caption><thead><tr><th scope="col">Fixture wallets</th><th scope="col">Deposit each</th><th scope="col">Check-in</th><th scope="col">Gross payout each</th><th scope="col">Net each*</th></tr></thead><tbody><tr><td>A, B, C, D</td><td>10</td><td>Yes</td><td>12.5</td><td>+2.5</td></tr><tr><td>E</td><td>10</td><td>No</td><td>0</td><td>−10</td></tr><tr><th scope="row">Total</th><td>50</td><td>4 of 5</td><td>50 paid</td><td>0</td></tr></tbody></table>
+<p>All four claims completed. Dust: 0. Recorded obligation remaining: 0; isolated core balance reconciled to 0.</p>
+<p class="note">*Excludes gas. A–E are synthetic wallets, not five users. Real local transactions used a test-only wallet provider. Other pots or donations can make global balance differ from this pot’s obligation.</p>
+<p class="note"><a href="../verification/local-browser/browser-report.json">Saved browser report</a> + <a href="../verification/local-browser/deployment.json">local fixture identity</a>. The report does not contain a complete receipt-hash ledger. This is neither Fuji evidence nor fresh acceptance of the improvement candidate.</p>
+<footer><span>50,000,000 / 4 = 12,500,000 base units · no yield</span><span>4 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s5">
+<h2 id="s5">No admin withdrawal ≠ no trust</h2>
+<div class="cols">
+<div><h3>What the contract fixes</h3><ul><li>No admin withdrawal or mutable pot settings in this implementation.</li><li>Eligibility, one claim per beneficiary and deterministic rounding.</li><li>Anyone may call a claim; tokens go only to its eligible beneficiary.</li><li>Recorded deposits—not donations—fund each pot’s entitlements.</li></ul></div>
+<div><h3>What remains trusted</h3><ul><li>The verifier’s attendance judgment and availability.</li><li>Wallet, RPC, token behavior and the source/deployment match.</li><li>A copied QR identifies a wallet/pot; it proves neither presence nor wallet ownership.</li><li>After partial check-in, verifier loss can unfairly exclude others. No remedy exists here.</li></ul></div>
+</div>
+<p class="note">Test USDC can be subject to issuer pause/blacklist rules; Fuji token identity still needs verification. Development testing is not a formal security audit. No claim expiry or unclaimed-fund sweep.</p>
+<footer><span><a href="../../packages/contracts/src/CommitPot.sol">Contract source</a> · human check-in remains explicit</span><span>5 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s6">
+<h2 id="s6">Know which evidence you are seeing</h2>
+<table><thead><tr><th scope="col">Mode</th><th scope="col">What it supports</th><th scope="col">What it does not</th></tr></thead><tbody><tr><th scope="row">Local mock</th><td>EN/VI flow; synthetic accounts and receipts</td><td>Blockchain execution</td></tr><tr><th scope="row">Local Anvil · 31337</th><td>Historical browser-to-chain lifecycle, real local signatures and transactions</td><td>Fuji deployment, live service or human pilot</td></tr><tr><th scope="row">Avalanche Fuji · 43113</th><td>Intended public testnet target</td><td>Release pending; no verified public address or receipt supplied</td></tr></tbody></table>
+<p>Solidity/EIP-712 contracts and the viem adapter provide an EVM integration path. Public Avalanche evidence still requires an authorized deployment, verified token and exact source/artifact/receipt identity.</p>
+<p class="band">Demo pairing: historical eligible payout + no-show denial.<br>Label a read-only simulation as a simulation; never call it a mined revert. An already-paid wallet should now return <strong>AlreadyClaimed</strong>.</p>
+<footer><span><a href="../../docs/demo/README.md">Evidence tiers and missing receipt fields</a> · no public release claim</span><span>6 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s7">
+<h2 id="s7">Measure usability, not invented impact</h2>
+<p class="lead">A proposed consent-based, test-token exercise. Not yet conducted; no recruitment in this task.</p>
+<div class="cols">
+<div><h3>Observe the work</h3><ul><li>Consent, understand the forfeiture rule, join, check in and claim.</li><li>Record wallet failures, retries, verifier attempts and reconciliation effort.</li><li>Separate unique people, fixture wallets, tasks and transaction attempts.</li></ul></div>
+<div><h3>Keep the denominators</h3><ul><li>Report completions / starters, and claims / eligible wallets.</li><li>Keep failed, pending and abandoned attempts visible.</li><li>Record timing start/end definitions; report sample size with median and range.</li><li>No percentage or benefit claim before observations exist.</li></ul></div>
+</div>
+<p class="band">Worthless test stakes cannot establish a real no-show reduction. That causal question needs a separately approved comparative study.</p>
+<footer><span><a href="../../docs/demo/PILOT_PROTOCOL.md">Protocol, privacy and reporting definitions</a></span><span>7 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s8">
+<h2 id="s8">A narrow product. An explicit next gate.</h2>
+<p class="lead">Inspect the source and local reconciliation. Then decide whether to authorize a public testnet release and a consented usability exercise.</p>
+<ol><li>Accept the exact improvement candidate with fresh local tests and controls.</li><li>Separately authorize Fuji token/signer/funding/deployment and HTTPS hosting; verify release identity and receipts.</li><li>Record the captioned 2–3 minute demo, prepare the required accessible slide format, and check judge access before any authorized submission.</li></ol>
+<p class="note">The cached official rubric weights: technical 25 · Avalanche 25 · creativity 15 · impact 15 · pitch 10 · UI/demo 10. These are criteria, <strong>not predicted points</strong>.</p>
+<p><a href="https://github.com/khoi1709/commitpot">Public repository</a> · <a href="../../docs/demo/README.md">Evidence guide</a> · <a href="../../docs/demo/NARRATED_DEMO.md">Narration</a> · <a href="../../docs/competitive-review/EVIDENCE_CACHE.md">Cached official requirements</a></p>
+<p class="note">Offline HTML source only. No Canva/Google Slides publication, video, Fuji address, hosting, user metrics or submission is delivered by this pack.</p>
+<footer><span>Test tokens only · public testnet release pending</span><span>8 / 8</span></footer>
+</section>
+</main>
+</body>
+</html>

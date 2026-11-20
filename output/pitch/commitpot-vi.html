@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>CommitPot — Bộ slide tiếng Việt · tám trang</title>
+<style>
+:root { color-scheme: light; --ink:#242039; --muted:#665f79; --brand:#5130b5; --ground:#f4f3f9; --line:#cbc5da; --paper:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--ground); color:var(--ink); font-family:"Segoe UI",Arial,sans-serif; font-size:20px; line-height:1.42; }
+a { color:var(--brand); text-underline-offset:.18em; overflow-wrap:anywhere; }
+a:focus-visible { outline:3px solid var(--brand); outline-offset:4px; }
+::selection { background:#d9cbff; color:#24184b; }
+nav { max-width:1280px; margin:0 auto; padding:18px 28px; font-size:16px; display:flex; gap:24px; flex-wrap:wrap; }
+main { max-width:1280px; margin:0 auto 32px; }
+.slide { background:var(--paper); aspect-ratio:16 / 9; padding:40px 56px 24px; margin-bottom:24px; display:flex; flex-direction:column; gap:18px; border-top:8px solid var(--brand); }
+h1,h2,h3,p,ul,ol { margin:0; }
+h1 { font-size:64px; line-height:1.08; letter-spacing:-.035em; color:var(--brand); }
+h2 { font-size:42px; line-height:1.15; letter-spacing:-.025em; color:var(--brand); text-wrap:balance; }
+h3 { font-size:23px; line-height:1.25; margin-bottom:10px; }
+.lead { font-size:30px; line-height:1.32; max-width:54ch; text-wrap:balance; }
+.statement { font-size:35px; line-height:1.25; max-width:43ch; margin:8px 0; }
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:44px; }
+ul,ol { padding-left:1.2em; }
+li + li { margin-top:9px; }
+.note { font-size:17px; color:var(--muted); }
+.band { background:var(--ground); padding:16px 20px; }
+strong { font-weight:650; }
+table { border-collapse:collapse; width:100%; font-size:20px; font-variant-numeric:tabular-nums; }
+th,td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { font-weight:650; }
+caption { text-align:left; font-size:17px; color:var(--muted); margin-bottom:8px; }
+.equation { font-size:30px; font-weight:650; font-variant-numeric:tabular-nums; }
+footer { margin-top:auto; padding-top:12px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:20px; font-size:15px; color:var(--muted); }
+footer span:last-child { white-space:nowrap; }
+@media (max-width:900px) {
+ body { font-size:18px; }
+ .slide { aspect-ratio:auto; min-height:75vh; padding:28px 24px 20px; gap:20px; }
+ h1 { font-size:48px; } h2 { font-size:32px; } .lead,.statement { font-size:25px; }
+ .cols { grid-template-columns:1fr; gap:24px; }
+ table { font-size:16px; } th,td { padding:8px 5px; }
+ footer { font-size:14px; flex-wrap:wrap; }
+}
+@page { size:A4 landscape; margin:0; }
+@media print {
+ body { background:white; font-size:14pt; }
+ nav { display:none; } main { max-width:none; margin:0; }
+ .slide { width:297mm; height:210mm; aspect-ratio:auto; margin:0; padding:13mm 15mm 9mm; gap:5mm; border-top:2mm solid var(--brand); break-after:page; break-inside:avoid; }
+ .slide:last-child { break-after:auto; }
+ h1 { font-size:43pt; } h2 { font-size:29pt; } h3 { font-size:17pt; }
+ .lead,.statement { font-size:22pt; } .equation { font-size:22pt; }
+ .cols { grid-template-columns:1fr 1fr; gap:12mm; }
+ table { font-size:14pt; } th,td { padding:3mm; }
+ .note,caption { font-size:12pt; } footer { font-size:10pt; padding-top:3mm; }
+ .band { padding:4mm 5mm; } a { color:inherit; }
+}
+</style>
+</head>
+<body>
+<nav aria-label="Liên kết tài liệu"><a href="commitpot-en.html" lang="en">English</a><a href="../../docs/demo/README.md">Bằng chứng và cách in</a><a href="../../docs/demo/NARRATED_DEMO.md">Kịch bản thuyết minh</a></nav>
+<main>
+<section class="slide" aria-labelledby="s1">
+<h1 id="s1">CommitPot</h1>
+<p class="lead">Tiền cam kết cố định. Điểm danh có trách nhiệm.<br>Chi trả có thể kiểm tra.</p>
+<p class="statement">Cam kết tham dự tự nguyện cho workshop có người điểm danh—không hứa cải thiện tỷ lệ tham dự.</p>
+<p>Người tham gia gửi token thử nghiệm trước hạn. Người xác minh được chỉ định ghi nhận điểm danh. Hợp đồng áp dụng quy tắc chi trả đã thống nhất.</p>
+<p class="band"><strong>Chỉ dùng token thử nghiệm. Không dùng tiền thật.</strong><br>Đã kiểm chứng luồng cục bộ; bản phát hành Fuji công khai đang chờ.</p>
+<p class="note">Bản tiếng Việt · tám trang · <a href="https://github.com/khoi1709/commitpot">Mã nguồn công khai</a><br>Không tuyên bố đã có hosting, thí điểm với người dùng hay số liệu giảm vắng mặt.</p>
+<footer><span>CommitPot · bằng chứng cục bộ, chưa triển khai công khai</span><span>1 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s2">
+<h2 id="s2">Workshop nhỏ, thỏa thuận rõ</h2>
+<p class="lead">Tình huống minh họa: câu lạc bộ chuẩn bị chỗ ngồi và vật liệu có hạn. Tham gia và gửi token đều tự nguyện.</p>
+<div class="cols">
+<div><h3>Biểu mẫu + chuyển khoản</h3><ul><li>Công cụ đăng ký, thanh toán quen thuộc.</li><li>Ban tổ chức giữ tiền và đối soát khoản hoàn trả hoặc thưởng.</li><li>Không cần hướng dẫn ví hay phí gas testnet.</li></ul></div>
+<div><h3>CommitPot</h3><ul><li>Token theo quy tắc hợp đồng cố định, không theo quyết định rút tiền của ban tổ chức.</li><li>Có thể kiểm tra điểm danh và chi trả theo ví.</li><li>Đánh đổi: thao tác ví, gas AVAX và sự tin cậy vào người xác minh.</li></ul></div>
+</div>
+<p class="band">Giả thuyết: dễ kiểm tra việc đối soát hơn. Chưa chứng minh tiết kiệm thời gian, giảm vắng mặt hay an toàn hơn đối thủ.</p>
+<footer><span>Tình huống hư cấu; chưa tuyển người hoặc thực hiện nghiên cứu</span><span>2 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s3">
+<h2 id="s3">Hiểu quy tắc trước khi gửi token</h2>
+<ol><li><strong>Tạo quỹ:</strong> cố định token, mức gửi, người xác minh và các hạn đăng ký/điểm danh.</li><li><strong>Tham gia:</strong> cấp quyền đúng mức, rồi gửi trước hạn đăng ký. Gas là khoản riêng.</li><li><strong>Điểm danh:</strong> người xác minh kiểm tra, xác nhận có mặt, ký và gửi giao dịch. Chữ ký riêng lẻ chưa phải điểm danh đã xác nhận.</li><li><strong>Chốt và nhận:</strong> ai cũng có thể chốt sau hạn điểm danh. Token luôn tới ví thụ hưởng hợp lệ, không bị người gọi chuyển hướng.</li></ol>
+<p class="band"><strong>Có người điểm danh:</strong> chỉ các ví được xác nhận chia tổng token đã gửi. Ví vắng mặt mất khoản cam kết.<br><strong>Không ai điểm danh:</strong> mỗi ví đã tham gia được nhận lại khoản gốc.</p>
+<p class="note">Khoản nhận phụ thuộc điểm danh, không phải lãi. Đơn vị dư do làm tròn chia cho thứ tự điểm danh sớm nhất. Không hủy, sửa quy tắc, khiếu nại hoặc thay người xác minh.</p>
+<footer><span><a href="../../docs/EXECUTION_CONTRACT.md">Quy tắc cố định</a></span><span>3 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s4">
+<h2 id="s4">Một kết quả cục bộ đã ghi nhận</h2>
+<p class="equation">5 × 10 gửi vào = 50 → 4 × 12.5 chi trả</p>
+<table><caption>Bản ghi Anvil chain 31337 · quỹ 3 · token cục bộ có sáu chữ số thập phân</caption><thead><tr><th scope="col">Ví thử nghiệm</th><th scope="col">Mỗi ví gửi</th><th scope="col">Điểm danh</th><th scope="col">Mỗi ví nhận</th><th scope="col">Chênh lệch*</th></tr></thead><tbody><tr><td>A, B, C, D</td><td>10</td><td>Có</td><td>12.5</td><td>+2.5</td></tr><tr><td>E</td><td>10</td><td>Không</td><td>0</td><td>−10</td></tr><tr><th scope="row">Tổng</th><td>50</td><td>4 / 5 ví</td><td>50 đã trả</td><td>0</td></tr></tbody></table>
+<p>Đã nhận đủ bốn khoản. Phần dư: 0. Nghĩa vụ còn lại của quỹ: 0; số dư hợp đồng trong lần chạy biệt lập được đối soát về 0.</p>
+<p class="note">*Chưa tính gas. A–E là ví tổng hợp, không phải năm người dùng. Giao dịch cục bộ là thật, qua bộ giả lập ví chỉ dành cho kiểm thử. Quỹ khác hoặc token gửi trực tiếp có thể làm số dư toàn hợp đồng khác nghĩa vụ riêng của quỹ.</p>
+<p class="note"><a href="../verification/local-browser/browser-report.json">Báo cáo trình duyệt đã lưu</a> + <a href="../verification/local-browser/deployment.json">định danh cấu hình cục bộ</a>. Chưa có danh sách đầy đủ mã giao dịch. Đây không phải bằng chứng Fuji hoặc nghiệm thu mới cho bản cải tiến.</p>
+<footer><span>50,000,000 / 4 = 12,500,000 đơn vị cơ sở · không phải lãi</span><span>4 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s5">
+<h2 id="s5">Không có quyền rút của admin ≠ không cần tin cậy</h2>
+<div class="cols">
+<div><h3>Hợp đồng cố định</h3><ul><li>Bản triển khai mã nguồn này không có quyền rút cho admin hay sửa quy tắc quỹ.</li><li>Điều kiện nhận, một lần nhận mỗi ví và cách làm tròn xác định.</li><li>Ai cũng có thể gọi nhận; token chỉ tới ví thụ hưởng hợp lệ.</li><li>Quyền nhận dựa trên khoản gửi đã ghi nhận, không cộng token tặng trực tiếp.</li></ul></div>
+<div><h3>Vẫn cần tin cậy</h3><ul><li>Phán đoán và khả năng có mặt của người xác minh.</li><li>Ví, RPC, token và độ khớp giữa mã nguồn với bản triển khai.</li><li>QR chỉ định danh ví/quỹ; không chứng minh có mặt hay sở hữu ví.</li><li>Mất người xác minh sau một phần điểm danh có thể gây bất công. Chưa có cơ chế xử lý.</li></ul></div>
+</div>
+<p class="note">Test USDC có thể chịu cơ chế tạm dừng/chặn của đơn vị phát hành; định danh token Fuji còn cần kiểm chứng. Kiểm thử phát triển không phải kiểm toán bảo mật độc lập. Không hết hạn nhận hoặc thu gom token chưa nhận.</p>
+<footer><span><a href="../../packages/contracts/src/CommitPot.sol">Mã nguồn hợp đồng</a> · điểm danh vẫn do con người</span><span>5 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s6">
+<h2 id="s6">Phân biệt đúng loại bằng chứng</h2>
+<table><thead><tr><th scope="col">Chế độ</th><th scope="col">Chứng minh được</th><th scope="col">Không chứng minh</th></tr></thead><tbody><tr><th scope="row">Mock cục bộ</th><td>Luồng EN/VI; ví và biên nhận tổng hợp</td><td>Thực thi blockchain</td></tr><tr><th scope="row">Anvil · 31337</th><td>Luồng trình duyệt–chain đã lưu, chữ ký và giao dịch cục bộ thật</td><td>Fuji, dịch vụ đang chạy hay thí điểm với người dùng</td></tr><tr><th scope="row">Fuji · 43113</th><td>Mạng thử nghiệm công khai dự kiến</td><td>Chưa phát hành; chưa cung cấp địa chỉ/biên nhận công khai đã xác minh</td></tr></tbody></table>
+<p>Hợp đồng Solidity/EIP-712 và bộ kết nối viem tạo đường tích hợp EVM. Bằng chứng Avalanche công khai vẫn cần triển khai được cho phép, kiểm tra token và đối chiếu mã nguồn, bản build, biên nhận.</p>
+<p class="band">Cặp đối chứng: khoản nhận hợp lệ đã ghi nhận + từ chối ví vắng mặt.<br>Mô phỏng chỉ đọc phải ghi là mô phỏng, không phải giao dịch lỗi đã lên chain. Ví đã nhận phải báo <strong>AlreadyClaimed</strong>.</p>
+<footer><span><a href="../../docs/demo/README.md">Cấp độ bằng chứng và dữ liệu còn thiếu</a></span><span>6 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s7">
+<h2 id="s7">Đo khả năng sử dụng, không bịa tác động</h2>
+<p class="lead">Đề xuất thử nghiệm tự nguyện bằng token thử nghiệm. Chưa thực hiện; nhiệm vụ này không tuyển người.</p>
+<div class="cols">
+<div><h3>Quan sát thao tác</h3><ul><li>Đồng ý, hiểu rủi ro mất khoản gửi, tham gia, điểm danh và nhận.</li><li>Ghi lỗi ví, lần thử lại, lượt xác minh và công đối soát.</li><li>Tách số người, ví thử nghiệm, tác vụ và lần gửi giao dịch.</li></ul></div>
+<div><h3>Giữ rõ mẫu số</h3><ul><li>Báo hoàn thành / bắt đầu; nhận thành công / ví đủ điều kiện.</li><li>Không bỏ các lần lỗi, chờ hoặc dừng giữa chừng.</li><li>Định nghĩa mốc đo; báo cỡ mẫu cùng trung vị và khoảng min–max.</li><li>Chưa có quan sát thì chưa có tỷ lệ hoặc kết luận lợi ích.</li></ul></div>
+</div>
+<p class="band">Token không có giá trị không chứng minh giảm vắng mặt ngoài thực tế. Kết luận nhân quả cần nghiên cứu so sánh được phê duyệt riêng.</p>
+<footer><span><a href="../../docs/demo/PILOT_PROTOCOL.md">Quy trình, quyền riêng tư và cách báo cáo</a></span><span>7 / 8</span></footer>
+</section>
+<section class="slide" aria-labelledby="s8">
+<h2 id="s8">Phạm vi nhỏ. Bước tiếp theo rõ ràng.</h2>
+<p class="lead">Kiểm tra mã nguồn và đối soát cục bộ. Sau đó mới quyết định cho phép phát hành testnet và thử nghiệm có đồng thuận.</p>
+<ol><li>Nghiệm thu đúng bản cải tiến bằng kiểm thử cục bộ và đối chứng mới.</li><li>Cho phép riêng token, ví ký, phí gas, triển khai Fuji và hosting HTTPS; xác minh định danh bản phát hành cùng biên nhận.</li><li>Quay demo 2–3 phút có phụ đề, chuẩn bị định dạng slide truy cập được theo yêu cầu và kiểm tra quyền xem trước khi nộp được phép.</li></ol>
+<p class="note">Trọng số từ thể lệ chính thức đã lưu: kỹ thuật 25 · Avalanche 25 · sáng tạo 15 · tác động 15 · thuyết trình 10 · UI/demo 10. Đây là tiêu chí, <strong>không phải dự đoán điểm</strong>.</p>
+<p><a href="https://github.com/khoi1709/commitpot">Kho mã nguồn</a> · <a href="../../docs/demo/README.md">Hướng dẫn bằng chứng</a> · <a href="../../docs/demo/NARRATED_DEMO.md">Thuyết minh</a> · <a href="../../docs/competitive-review/EVIDENCE_CACHE.md">Thể lệ đã lưu</a></p>
+<p class="note">Chỉ là nguồn HTML ngoại tuyến. Chưa có Canva/Google Slides công khai, video, địa chỉ Fuji, hosting, số liệu người dùng hoặc bài nộp.</p>
+<footer><span>Chỉ token thử nghiệm · bản testnet công khai đang chờ</span><span>8 / 8</span></footer>
+</section>
+</main>
+</body>
+</html>

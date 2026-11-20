@@ -36,3 +36,8 @@ output/verification/local-browser/*
 !output/verification/local-browser/mobile-settled-vi.png
 packages/contracts/lib/
 packages/contracts/cache/
+
+!output/pitch/
+output/pitch/*
+!output/pitch/commitpot-en.html
+!output/pitch/commitpot-vi.html

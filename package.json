@@ -6,6 +6,9 @@
     "dev": "pnpm --filter @commitpot/web dev",
     "build": "pnpm --filter @commitpot/web build",
     "typecheck": "pnpm --filter @commitpot/web typecheck",
-    "test": "pnpm --filter @commitpot/web test"
+    "test:web": "pnpm --filter @commitpot/web test",
+    "test:contracts": "powershell.exe -NoProfile -File scripts/ci/test-contracts.ps1",
+    "test:integration": "powershell.exe -NoProfile -File scripts/ci/run-integration.ps1",
+    "test": "pnpm test:web && pnpm test:contracts"
   }
 }

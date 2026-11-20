@@ -20,10 +20,25 @@ For the standard example: move to check-in, select the verifier wallet, open the
 
 ## Development checks
 
+On the provisioned Windows runner, use the checked-in CI commands (PowerShell 5.1 plus Node.js 22, pnpm 11.25.0, and the pinned offline Foundry toolchain):
+
 ```powershell
-pnpm test
-pnpm typecheck
-pnpm build
+pnpm.cmd test:contracts
+pnpm.cmd test:integration
+```
+
+`test:contracts` force-builds offline, compares the freshly generated ABI, and runs the discovered unit, failure, and invariant suites. `test:integration` first refuses an existing listener on 127.0.0.1:18545, then owns and cleans its Anvil/Vitest processes and restores `COMMITPOT_LOCAL_RPC`. These commands need the preprovisioned dependencies, Foundry and fixture sources; they do not download or install tools. Current-candidate results must be recorded by the run that produced them; historical reports below are not current acceptance. The manual hosted workflow intentionally stops at its isolated-runner provisioning gate before checkout; hosted checks are not green. These reproducible local scripts are the available development gate, not hosted CI certification.
+
+## Current verification
+
+The latest source-gate results and unfinished browser acceptance are summarized in [current publication and verification status](<docs/PUBLICATION_STATUS.md>). A GitHub source publication is not a deployment, hosted-CI pass, security audit, or complete product acceptance.
+
+Other useful local commands, when the matching toolchain is available:
+
+```powershell
+pnpm.cmd test
+pnpm.cmd typecheck
+pnpm.cmd build
 ```
 
 Contract toolchain is pinned to Solidity 0.8.24 / Paris and uses OpenZeppelin 5.0.2 plus forge-std 1.9.7. A verified project-local Foundry 1.9.0 is available on this machine, not committed or globally installed:
@@ -38,16 +53,17 @@ The ABI export reads the real compiler artifact. It is not a handwritten interfa
 
 ## Real local-chain verification
 
-Use only a disposable loopback Anvil node, never a public RPC or a real user wallet:
+Use only the owned disposable loopback runner, never a public RPC or a real user wallet:
 
 ```powershell
-& .\.tools\foundry\anvil.exe --host 127.0.0.1 --port 8545 --chain-id 31337 --silent
-pnpm --filter @commitpot/web exec vitest run --config vitest.integration.config.ts
+pnpm.cmd test:integration
 ```
 
-The local integration deploys a chain-ID-restricted mock token and core/helper/strategy contracts, uses five distinct local wallets, signs actual EIP-712 proofs, records four check-ins and reconciles all four 12.5 payouts and a zero residual. It also compares viem/contract digests and rejects cross-core proof reuse. Test wallets are RPC-provided synthetic accounts; no private key enters the public client.
+The runner refuses to adopt a pre-existing listener and binds only its own Anvil on 127.0.0.1:18545 / chain 31337. It freshly compiles contracts offline, compares the compiler ABI, requires exactly the named integration case, and runs it with a process timeout. Output goes to a uniquely named `scratch/` run directory. It restores `COMMITPOT_LOCAL_RPC` and checks listener cleanup. The test deploys a chain-ID-restricted mock token and contracts, uses synthetic local wallets and real local EIP-712 transactions; no private key enters the public client.
 
-A separate browser test drives the real UI with a test-only injected wallet provider forwarding to that same loopback node. The fixture/provider is in test files only, never part of the app. See the verification record for the executed scope.
+The saved browser-to-Anvil test is a historical fixture whose configuration is pinned to 127.0.0.1:8545; it is not the current 18545 runner or the same Anvil process. Its test-only injected wallet provider and fixture remain confined to test files, never the app. See the verification record and demo evidence ledger for the exact historical scope.
+
+The wallet-free proof page at `/verify` is read-only. An unconfigured deployment is shown as unconfigured; when a manifest is configured, the page compares it with observed deployment identity and displays configured receipt-reference status. A configured manifest comparison is not a rebuild or source/runtime parity certificate. A matching configured deployment is not a formal audit.
 
 ## On-chain configuration
 
@@ -73,7 +89,9 @@ No cancellation, verifier replacement, disputes, payout expiry, or unclaimed-fun
 - [Current execution state](<docs/STATE.md>)
 - [Local readiness and verification evidence](<output/verification/LOCAL_READINESS.md>)
 - [Observed interface design system](<apps/web/DESIGN.md>)
+- [Windows offline CI and exact local runner](<.github/workflows/windows.yml>)
+- [Pitch, narration, and proposed consent protocol](<docs/demo/README.md>)
 - [Development verification findings](<docs/reviews/EXECUTION_FINDINGS.md>)
 - [Preserved original technical specification](<docs/sources/TECHSPEC.md>)
 
-The Ares project and original downloads remain unchanged. No Git publication, hosting, mainnet operation or hackathon submission is implied by local completion.
+The public source repository already existed at the historical baseline. This source publication does not publish a deployment or hosted service; no Fuji/mainnet operation, hosting, or hackathon submission is authorized or implied. The Ares project and original downloads remain unchanged.

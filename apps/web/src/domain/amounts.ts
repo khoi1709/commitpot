@@ -10,7 +10,7 @@ function validateDecimals(decimals: number): void {
 
 export function parseTokenAmount(text: string, decimals: number): bigint {
   validateDecimals(decimals);
-  if (typeof text !== 'string' || text.length > 335 || !/^(0|[1-9]\d*)(\.\d+)?$/.test(text)) {
+  if (typeof text !== 'string' || text.length > 335 || !/^(?:0|[1-9]\d*)(?:\.\d+)?(?![\s\S])/.test(text)) {
     throw new DomainError('INVALID_ARGUMENT', 'Use an unsigned decimal amount');
   }
   const [whole, fraction = ''] = text.split('.');
@@ -32,7 +32,7 @@ export function formatTokenAmount(amount: bigint, decimals: number): string {
 }
 
 export function parsePotId(text: string): bigint {
-  if (typeof text !== 'string' || !/^[1-9]\d{0,77}$/.test(text)) {
+  if (typeof text !== 'string' || !/^[1-9]\d{0,77}(?![\s\S])/.test(text)) {
     throw new DomainError('INVALID_ARGUMENT', 'Invalid pot ID');
   }
   const id = BigInt(text);

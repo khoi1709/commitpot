@@ -1,4 +1,12 @@
-# CommitPot domain API (v1)
+# CommitPot domain API (v1 baseline with current additive protocol)
+
+## Current candidate additions
+
+The baseline models/financial rules below are retained. Current code adds `OperationStage = 'preparing' | 'signing' | 'preflight' | 'submitting' | 'confirming'` and optional final `OperationContext { account: Address; chainId: number; onStage?: (stage: OperationStage) => void }` to repository writes, approval and signing. Existing one-argument calls remain valid; App uses explicit captured contexts. `waitForTransaction(hash, intent?: OperationIntent)` validates the actual chain transaction against the expected public JSON-safe operation; full intent fields depend on kind, including create config or check-in participant/nonce/deadline. `validateOperationIntent` rejects unknown/secret/noncanonical fields, detaches and normalizes values; `operationIntentsMatch` binds all specified expected fields. Neither persisted intent nor activity contains signature bytes/private keys.
+
+`IWalletPort.getNativeBalance(address?): Promise<bigint | null>` returns native base units or unavailable, not an estimated fee. `StageAwareError` retains `stage`, `submitted: boolean | 'unknown'`, structured provider code and cause; proof signing alone is never a broadcast. A known preflight/rejection can retire an own hashless intent; unknown sends retain recovery data. Receipt context may additionally contain chain/core/from/to/operation/pot/beneficiary/amount/block timestamp and `requestedHash` only for a validated equivalent repricing. Actual effective receipt hash stays in `hash`.
+
+Current exact definitions live in [types](<../apps/web/src/domain/types.ts>), [ports](<../apps/web/src/domain/ports.ts>) and [stage errors](<../apps/web/src/domain/errors.ts>). Application recovery v2 and Web Lock coordination live in [recovery](<../apps/web/src/application/recovery.ts>), separate from this pure domain. Historical v1 pending bytes remain incomplete/quarantined evidence, not automatically upgraded or replayed. See [current seam decisions](<improvements/luna/API_DECISIONS.md>) for R3 public reader/R4 receipt/R5 quarantine semantics. This additive API paragraph reflects inspected current source; it is not a claim of public deployment or formal certification.
 
 This document is the stable frontend boundary for the attendance-commitment MVP. It is provider/browser independent: consumers import from `apps/web/src/domain/index.ts`, while mock-only implementation is under `apps/web/src/infrastructure/mock/`. The mock is synthetic local state; it is not a wallet, a chain, or cryptographic proof of attendance.
 

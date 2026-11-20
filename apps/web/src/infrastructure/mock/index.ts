@@ -1,9 +1,10 @@
 import {
   DomainError, MAX_UINT256, calculateClaimAmount, calculatePayout, isCheckInAllowed,
+  operationIntentsMatch, toStageAwareError, validateOperationIntent,
   isFinalizeAllowed, isJoinAllowed, normalizeAddress, validatePotConfig, validateTimestamp,
   type Address, type ChainContext, type CheckInProof, type CheckInSigningInput,
   type IPotRepository, type IWalletPort, type ParticipantStatus, type PotConfig,
-  type PotSummary, type TokenInfo, type TransactionReceipt, type TxHash,
+  type PotSummary, type TokenInfo, type TransactionReceipt, type TxHash, type OperationContext, type OperationIntent, type OperationStage,
 } from '../../domain';
 
 export const MOCK_TOKEN_INFO: TokenInfo = { address: '0x0000000000000000000000000000000000001000', symbol: 'Test USDC', decimals: 6 };
@@ -29,12 +30,12 @@ type WirePot = Omit<PotSummary, 'id' | 'config' | 'participantCount' | 'checkedI
   participantCount: string; checkedInCount: string; payoutPerWinner: string; dustAmount: string;
   members: Record<string, WireMember>; nonces: string[];
 };
-type WireReceipt = Omit<TransactionReceipt, 'blockNumber' | 'createdPotId' | 'error'> & { blockNumber: string; createdPotId?: string };
+type WireReceipt = Omit<TransactionReceipt, 'blockNumber' | 'createdPotId' | 'potId' | 'amount' | 'error'> & { blockNumber: string; createdPotId?: string; potId?: string; amount?: string; requestedHash?: TxHash; intent?: OperationIntent };
 interface State { version: 1; clock: number; nextId: string; sequence: number; pots: Record<string, WirePot>; balances: Record<string, string>; allowances: Record<string, string>; proofs: Record<string, CheckInProof & { signer: Address }>; receipts: Record<string, WireReceipt> }
 const emptyMember = (): Member => ({ joined: false, checkedIn: false, claimed: false, order: 0n });
-const hashPattern = /^0x[0-9a-f]{64}$/;
+const hashPattern = /^0x[0-9a-f]{64}(?![\s\S])/;
 const uint = (value: unknown): bigint => {
-  if (typeof value !== 'string' || !/^(0|[1-9]\d{0,77})$/.test(value) || BigInt(value) > MAX_UINT256) throw new Error('Invalid uint');
+  if (typeof value !== 'string' || !/^(0|[1-9]\d{0,77})(?![\s\S])/.test(value) || BigInt(value) > MAX_UINT256) throw new Error('Invalid uint');
   return BigInt(value);
 };
 const record = (value: unknown): Record<string, unknown> => {
@@ -45,7 +46,7 @@ function wireSummary(pot: WirePot): PotSummary {
   return { id: BigInt(pot.id), config: { ...pot.config, stakeAmount: BigInt(pot.config.stakeAmount) }, status: pot.status,
     participantCount: BigInt(pot.participantCount), checkedInCount: BigInt(pot.checkedInCount), payoutPerWinner: BigInt(pot.payoutPerWinner), dustAmount: BigInt(pot.dustAmount) };
 }
-function encodeState(state: State): string { return JSON.stringify(state, (_, value) => typeof value === 'bigint' ? value.toString() : value); }
+function encodeState(state: State): string { return JSON.stringify({ ...state, proofs: {} }, (_, value) => typeof value === 'bigint' ? value.toString() : value); }
 function loadState(raw: string): State {
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new DomainError('STORAGE_CORRUPT', 'Saved demo data is unreadable; original data was preserved'); }
@@ -90,7 +91,8 @@ function loadState(raw: string): State {
       normalizeAddress(proof.participant); normalizeAddress(proof.signer); validateTimestamp(proof.deadline as number);
       proofs[signature] = { ...proof, potId: uint(proof.potId), nonce: uint(proof.nonce) } as State['proofs'][string];
     }
-    return { ...root, proofs } as unknown as State;
+    // Validate legacy proof bytes, but never reuse or re-persist a saved signature.
+    return { ...root, proofs: {} } as unknown as State;
   } catch (error) {
     if (error instanceof DomainError && error.code === 'STORAGE_VERSION') throw error;
     throw new DomainError('STORAGE_SCHEMA', 'Saved demo data is invalid; original data was preserved');
@@ -105,6 +107,8 @@ export class MockPotRepository implements IPotRepository, IWalletPort {
   private readonly storage?: MockStorage;
   private readonly storageKey: string;
   private readonly latencyMs: number;
+  private readonly issuedProofs = new Map<string, CheckInProof & { signer: Address }>();
+  private proofSequence = 0;
   constructor(options: { clock?: MockClock; storage?: MockStorage; storageKey?: string; latencyMs?: number; account?: Address | null } = {}) {
     this.clock = options.clock ?? createMockClock(); this.storage = options.storage;
     this.storageKey = options.storageKey ?? 'commitpot-demo-v1'; this.latencyMs = options.latencyMs ?? 80;
@@ -120,18 +124,47 @@ export class MockPotRepository implements IPotRepository, IWalletPort {
   private actor(): Address { if (!this.account) throw new DomainError('ACCOUNT_NOT_CONNECTED'); return this.account; }
   private pot(id: bigint, state = this.state): WirePot { const pot = state.pots[id.toString()]; if (!pot) throw new DomainError('POT_NOT_FOUND'); return pot; }
   private member(pot: WirePot, address: Address): Member { const value = pot.members[normalizeAddress(address)]; return value ? { ...value, order: BigInt(value.order) } : emptyMember(); }
-  private async write(action: (state: State) => bigint | void): Promise<TxHash> {
-    await new Promise(resolve => setTimeout(resolve, this.latencyMs));
-    if (this.storage && this.storage.getItem(this.storageKey) !== this.raw) throw new DomainError('STORAGE_SCHEMA', 'Demo changed in another tab; reload before continuing');
-    const candidate = loadState(encodeState(this.state));
-    const created = action(candidate);
-    candidate.sequence++; candidate.clock = this.clock.now();
-    const hash = `0x${candidate.sequence.toString(16).padStart(64, '0')}` as TxHash;
-    candidate.receipts[hash] = { hash, status: 'success', blockNumber: String(candidate.sequence), ...(created ? { createdPotId: created.toString() } : {}) };
-    const raw = encodeState(candidate);
-    try { this.storage?.setItem(this.storageKey, raw); } catch { throw new DomainError('TRANSFER_FAILED', 'Demo could not save; no change was committed'); }
-    this.state = candidate; this.raw = raw;
-    return hash;
+  private assertActor(context?: OperationContext): Address {
+    const account = this.actor();
+    if (context && context.chainId !== MOCK_CHAIN_CONTEXT.chainId) throw new DomainError('WRONG_CHAIN');
+    if (context && normalizeAddress(context.account) !== account) throw new DomainError('ACCOUNT_CHANGED');
+    return account;
+  }
+  private intentBase(account: Address) { return { account, chainId: MOCK_CHAIN_CONTEXT.chainId, core: MOCK_CHAIN_CONTEXT.coreAddress }; }
+  private async write(prepare: (account: Address) => OperationIntent, action: (state: State, account: Address) => { createdPotId?: bigint; potId?: bigint; beneficiary?: Address; amount?: bigint } | void, context?: OperationContext): Promise<TxHash> {
+    let stage: OperationStage = 'preparing';
+    const initialAccount = this.account;
+    const expected = Object.freeze({ account: context?.account ?? initialAccount, chainId: context?.chainId ?? MOCK_CHAIN_CONTEXT.chainId });
+    try {
+      context?.onStage?.(stage);
+      const expectedAccount = expected.account;
+      if (!expectedAccount) throw new DomainError('ACCOUNT_NOT_CONNECTED');
+      const expectedContext = Object.freeze({ account: expectedAccount, chainId: expected.chainId });
+      const account = this.assertActor(expectedContext); const bound = Object.freeze({ account, chainId: MOCK_CHAIN_CONTEXT.chainId });
+      let intent = validateOperationIntent(prepare(account));
+      await new Promise(resolve => setTimeout(resolve, this.latencyMs));
+      this.assertActor(bound);
+      if (this.storage && this.storage.getItem(this.storageKey) !== this.raw) throw new DomainError('STORAGE_SCHEMA', 'Demo changed in another tab; reload before continuing');
+      stage = 'preflight'; context?.onStage?.(stage); this.assertActor(bound);
+      await new Promise(resolve => setTimeout(resolve, 0)); this.assertActor(bound);
+      const candidate = loadState(encodeState(this.state));
+      const metadata = action(candidate, account);
+      if (metadata?.amount !== undefined) intent = validateOperationIntent({ ...intent, amount: String(metadata.amount) });
+      candidate.sequence++; candidate.clock = this.clock.now();
+      const hash = `0x${candidate.sequence.toString(16).padStart(64, '0')}` as TxHash;
+      const potId = metadata?.createdPotId?.toString() ?? metadata?.potId?.toString() ?? intent.potId;
+      const beneficiary = metadata?.beneficiary ?? intent.beneficiary ?? (intent.kind === 'checkIn' ? intent.proof.participant : undefined);
+      candidate.receipts[hash] = { hash, status: 'success', blockNumber: String(candidate.sequence), chainId: intent.chainId, coreAddress: intent.core, from: account, to: intent.kind === 'approve' ? MOCK_CHAIN_CONTEXT.token : intent.core, operation: intent.kind, blockTimestamp: candidate.clock, intent,
+        ...(metadata?.createdPotId ? { createdPotId: String(metadata.createdPotId) } : {}), ...(potId ? { potId } : {}), ...(intent.amount !== undefined ? { amount: intent.amount } : {}), ...(beneficiary ? { beneficiary } : {}) };
+      const raw = encodeState(candidate);
+      stage = 'submitting'; context?.onStage?.(stage); this.assertActor(bound);
+      if (this.storage && this.storage.getItem(this.storageKey) !== this.raw) throw new DomainError('STORAGE_SCHEMA', 'Demo changed in another tab; reload before continuing');
+      // There is no network ambiguity in the mock: commit succeeds entirely or not at all.
+      try { this.storage?.setItem(this.storageKey, raw); } catch { throw new DomainError('TRANSFER_FAILED', 'Demo could not save; no change was committed'); }
+      this.state = candidate; this.raw = raw;
+      try { context?.onStage?.('confirming'); } catch { /* never hide a committed hash */ }
+      return hash;
+    } catch (error) { throw toStageAwareError(error, stage, false); }
   }
   async getPot(id: bigint): Promise<PotSummary> { return wireSummary(this.pot(id)); }
   async getParticipantStatus(id: bigint, address: Address): Promise<ParticipantStatus> {
@@ -148,22 +181,21 @@ export class MockPotRepository implements IPotRepository, IWalletPort {
     if (spender && normalizeAddress(spender) !== MOCK_CHAIN_CONTEXT.coreAddress) return 0n;
     return BigInt(this.state.allowances[normalizeAddress(owner ?? this.actor())] ?? '0');
   }
-  async approveToken(amount: bigint): Promise<TxHash> {
-    const account = this.actor(); if (amount < 0n || amount > MAX_UINT256) throw new DomainError('INVALID_ARGUMENT');
-    return this.write(state => { state.allowances[account] = amount.toString(); });
+  async getNativeBalance(address?: Address): Promise<bigint | null> { if (address) normalizeAddress(address); return null; }
+  async approveToken(amount: bigint, context?: OperationContext): Promise<TxHash> {
+    return this.write(account => ({ ...this.intentBase(account), kind: 'approve', token: MOCK_TOKEN_INFO.address, amount: String(amount) }), (state, account) => { state.allowances[account] = amount.toString(); }, context);
   }
-  async createPot(config: PotConfig): Promise<TxHash> {
-    this.actor(); validatePotConfig(config, this.clock.now(), MOCK_TOKEN_INFO.address);
-    return this.write(state => {
-      validatePotConfig(config, this.clock.now(), MOCK_TOKEN_INFO.address);
+  async createPot(config: PotConfig, context?: OperationContext): Promise<TxHash> {
+    const copy = { ...config };
+    return this.write(account => ({ ...this.intentBase(account), kind: 'create', config: { ...copy, stakeAmount: String(copy.stakeAmount) }, token: copy.token, amount: String(copy.stakeAmount) }), state => {
+      validatePotConfig(copy, this.clock.now(), MOCK_TOKEN_INFO.address);
       const id = BigInt(state.nextId); state.nextId = (id + 1n).toString();
-      state.pots[String(id)] = { id: String(id), config: { ...config, token: normalizeAddress(config.token), verifier: normalizeAddress(config.verifier), stakeAmount: String(config.stakeAmount) }, status: 'OPEN', participantCount: '0', checkedInCount: '0', payoutPerWinner: '0', dustAmount: '0', members: {}, nonces: [] };
-      return id;
-    });
+      state.pots[String(id)] = { id: String(id), config: { ...copy, token: normalizeAddress(copy.token), verifier: normalizeAddress(copy.verifier), stakeAmount: String(copy.stakeAmount) }, status: 'OPEN', participantCount: '0', checkedInCount: '0', payoutPerWinner: '0', dustAmount: '0', members: {}, nonces: [] };
+      return { createdPotId: id };
+    }, context);
   }
-  async joinPot(id: bigint): Promise<TxHash> {
-    const account = this.actor();
-    return this.write(state => {
+  async joinPot(id: bigint, context?: OperationContext): Promise<TxHash> {
+    return this.write(account => ({ ...this.intentBase(account), kind: 'join', potId: String(id), token: MOCK_TOKEN_INFO.address }), (state, account) => {
       const pot = this.pot(id, state); const summary = wireSummary(pot);
       if (!isJoinAllowed(summary, this.clock.now())) throw new DomainError('REGISTRATION_CLOSED');
       if (pot.members[account]) throw new DomainError('ALREADY_JOINED');
@@ -172,23 +204,36 @@ export class MockPotRepository implements IPotRepository, IWalletPort {
       if (balance < stake) throw new DomainError('INSUFFICIENT_BALANCE');
       state.balances[account] = String(balance - stake); state.allowances[account] = String(allowance - stake);
       pot.members[account] = { joined: true, checkedIn: false, claimed: false, order: '0' }; pot.participantCount = String(summary.participantCount + 1n);
-    });
+      return { potId: id, amount: stake };
+    }, context);
   }
-  async signCheckIn(input: CheckInSigningInput): Promise<CheckInProof> {
-    const actor = this.actor(); const pot = this.pot(input.potId);
-    if (actor !== pot.config.verifier) throw new DomainError('WRONG_VERIFIER');
-    normalizeAddress(input.participant); validateTimestamp(input.deadline);
-    if (input.nonce < 0n || input.nonce > MAX_UINT256) throw new DomainError('INVALID_ARGUMENT');
-    const issued = { ...input, participant: normalizeAddress(input.participant) };
-    const hash = await this.write(state => {
-      const signature = `0x${(state.sequence + 1).toString(16).padStart(64, '0')}` as TxHash;
-      state.proofs[signature] = { ...issued, signature, signer: actor };
-    });
-    return { ...issued, signature: hash };
+  async signCheckIn(input: CheckInSigningInput, context?: OperationContext): Promise<CheckInProof> {
+    let stage: OperationStage = 'preparing';
+    const captured = Object.freeze({ ...input });
+    const expected = Object.freeze({ account: context?.account ?? this.account, chainId: context?.chainId ?? MOCK_CHAIN_CONTEXT.chainId });
+    try {
+      context?.onStage?.(stage);
+      const expectedAccount = expected.account;
+      if (!expectedAccount) throw new DomainError('ACCOUNT_NOT_CONNECTED');
+      const expectedContext = Object.freeze({ account: expectedAccount, chainId: expected.chainId });
+      const actor = this.assertActor(expectedContext); const pot = this.pot(captured.potId);
+      if (actor !== pot.config.verifier) throw new DomainError('WRONG_VERIFIER');
+      const issued = { ...captured, potId: captured.potId, participant: normalizeAddress(captured.participant) };
+      if (typeof issued.nonce !== 'bigint' || issued.nonce < 0n || issued.nonce > MAX_UINT256) throw new DomainError('INVALID_ARGUMENT');
+      validateTimestamp(issued.deadline);
+      await new Promise(resolve => setTimeout(resolve, this.latencyMs));
+      this.assertActor({ account: actor, chainId: MOCK_CHAIN_CONTEXT.chainId });
+      stage = 'signing'; context?.onStage?.(stage);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      this.assertActor({ account: actor, chainId: MOCK_CHAIN_CONTEXT.chainId });
+      const signature = `0x${(++this.proofSequence).toString(16).padStart(64, '0')}` as TxHash;
+      const proof = { ...issued, signature };
+      this.issuedProofs.set(signature, { ...proof, signer: actor });
+      return proof;
+    } catch (error) { throw toStageAwareError(error, stage, false); }
   }
-  async submitCheckIn(proof: CheckInProof): Promise<TxHash> {
-    this.actor();
-    return this.write(state => {
+  async submitCheckIn(proof: CheckInProof, context?: OperationContext): Promise<TxHash> {
+    return this.write(account => ({ ...this.intentBase(account), kind: 'checkIn', potId: String(proof.potId), token: MOCK_TOKEN_INFO.address, beneficiary: normalizeAddress(proof.participant), proof: { participant: normalizeAddress(proof.participant), nonce: String(proof.nonce), deadline: proof.deadline } }), (state, _account) => {
       const pot = this.pot(proof.potId, state);
       if (!isCheckInAllowed(wireSummary(pot), this.clock.now())) throw new DomainError('CHECK_IN_NOT_OPEN');
       if (this.clock.now() > proof.deadline) throw new DomainError('PROOF_EXPIRED');
@@ -196,34 +241,43 @@ export class MockPotRepository implements IPotRepository, IWalletPort {
       if (!member) throw new DomainError('NOT_JOINED');
       if (member.checkedIn) throw new DomainError('ALREADY_CHECKED_IN');
       if (pot.nonces.includes(String(proof.nonce))) throw new DomainError('NONCE_REUSED');
-      const issued = state.proofs[proof.signature];
+      const issued = this.issuedProofs.get(proof.signature);
       if (!issued || issued.signer !== pot.config.verifier || issued.potId !== proof.potId || issued.participant !== address || issued.nonce !== proof.nonce || issued.deadline !== proof.deadline) throw new DomainError('INVALID_PROOF');
       pot.checkedInCount = String(BigInt(pot.checkedInCount) + 1n); member.checkedIn = true; member.order = pot.checkedInCount; pot.nonces.push(String(proof.nonce));
-    });
+      return { potId: proof.potId, beneficiary: address };
+    }, context);
   }
-  async finalizePot(id: bigint): Promise<TxHash> {
-    this.actor(); return this.write(state => {
+  async finalizePot(id: bigint, context?: OperationContext): Promise<TxHash> {
+    return this.write(account => ({ ...this.intentBase(account), kind: 'finalize', potId: String(id), token: MOCK_TOKEN_INFO.address }), (state, _account) => {
       const pot = this.pot(id, state); const summary = wireSummary(pot);
       if (pot.status === 'FINALIZED') throw new DomainError('POT_ALREADY_FINALIZED');
       if (!isFinalizeAllowed(summary, this.clock.now())) throw new DomainError('CHECK_IN_NOT_OPEN');
       const payout = calculatePayout(summary.participantCount, summary.checkedInCount, summary.config.stakeAmount);
       pot.payoutPerWinner = String(payout.base); pot.dustAmount = String(payout.dust); pot.status = 'FINALIZED';
-    });
+      return { potId: id };
+    }, context);
   }
-  async claimPayout(id: bigint, beneficiary: Address): Promise<TxHash> {
-    this.actor(); const address = normalizeAddress(beneficiary);
-    return this.write(state => {
+  async claimPayout(id: bigint, beneficiary: Address, context?: OperationContext): Promise<TxHash> {
+    const address = normalizeAddress(beneficiary);
+    return this.write(account => ({ ...this.intentBase(account), kind: 'claim', potId: String(id), beneficiary: address, token: MOCK_TOKEN_INFO.address }), (state, _account) => {
       const pot = this.pot(id, state); const member = this.member(pot, address);
       if (pot.status !== 'FINALIZED') throw new DomainError('NOT_FINALIZED');
       if (member.claimed) throw new DomainError('ALREADY_CLAIMED');
       const amount = calculateClaimAmount(wireSummary(pot), { ...member, claimable: 0n });
       if (!amount) throw new DomainError('NOT_ELIGIBLE');
       pot.members[address].claimed = true; state.balances[address] = String(BigInt(state.balances[address] ?? '0') + amount);
-    });
+      return { potId: id, beneficiary: address, amount };
+    }, context);
   }
-  async waitForTransaction(hash: TxHash): Promise<TransactionReceipt> {
+  async waitForTransaction(hash: TxHash, intent?: OperationIntent): Promise<TransactionReceipt> {
+    if (!hashPattern.test(hash)) throw new DomainError('INVALID_HASH');
     const receipt = this.state.receipts[hash]; if (!receipt) throw new DomainError('TRANSACTION_NOT_FOUND');
-    return { ...receipt, blockNumber: BigInt(receipt.blockNumber), ...(receipt.createdPotId ? { createdPotId: BigInt(receipt.createdPotId) } : {}) } as TransactionReceipt;
+    if (intent) {
+      const expected = validateOperationIntent(intent);
+      if (!receipt.intent || !operationIntentsMatch(receipt.intent, expected)) return { hash, status: 'failure', blockNumber: BigInt(receipt.blockNumber), chainId: receipt.chainId, coreAddress: receipt.coreAddress, error: toStageAwareError(new DomainError('RECEIPT_MISMATCH'), 'confirming', true) };
+    }
+    const { intent: _intent, ...publicReceipt } = receipt;
+    return { ...publicReceipt, blockNumber: BigInt(receipt.blockNumber), ...(receipt.createdPotId ? { createdPotId: BigInt(receipt.createdPotId) } : {}), ...(receipt.potId ? { potId: BigInt(receipt.potId) } : {}), ...(receipt.amount !== undefined ? { amount: BigInt(receipt.amount) } : {}) } as TransactionReceipt;
   }
   reset(): void {
     const fresh = this.initialState(); const raw = encodeState(fresh); this.storage?.setItem(this.storageKey, raw); this.state = fresh; this.raw = raw;

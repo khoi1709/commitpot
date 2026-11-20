@@ -1,4 +1,14 @@
-# CommitPot — completed local implementation checkpoint
+# CommitPot — historical completed baseline; improvements in progress
+
+## Current authority override — 19 November 2026
+
+The remaining sections are the **historical verified local baseline**, not a current server or improved-candidate acceptance report. Current HEAD is `fea386bdde0bf6051af1116790f0762609dcf891`, but the working tree contains partial improvement changes that require new integration/type/build/runtime checks. Previous GitHub creation/push/public visibility were separately authorized and completed; old 'no Git publication' text below is historical. No current service is assumed running from old job IDs. A separate bounded human authorization permitted one source-only commit and push to the existing `origin/main`, now completed. It did not authorize deployment, Fuji, hosting, a product release, real-wallet use, or further implementation. See [current publication and verification status](<PUBLICATION_STATUS.md>) for evidence and limits.
+
+Latest human routing: lead and any `cliproxyapi/gpt-6.1-sol/max` children plan/review only; execution belongs to `cliproxyapi/gpt-6-luna/max` workers. See [active routing](<improvements/ROUTING.md>), [ownership ledger](<improvements/LEDGER.md>) and [current acceptance gates](<improvements/ACCEPTANCE_GATES.md>). That one source publication does not imply Fuji, real-wallet use, hosting, recruitment, financial-policy changes, or any further Git publication.
+
+---
+
+# Historical completed local implementation checkpoint
 
 Local objective complete, goal revision4. All required review/build/test gates collected; only the user-facing mock app remains running. Fuji/publication/submission not performed.
 

@@ -47,6 +47,33 @@ describe('complete labelled mock lifecycle', () => {
     env.clock.set(220); await expect(env.repository.finalizePot(id)).rejects.toBeDefined();
     env.clock.set(221); await env.repository.finalizePot(id);
   });
+  it('stores receipt intents without signatures and rejects unrelated exact recovery', async () => {
+    const env = createMockPotEnvironment({ storage: new MemoryMockStorage(), clock: createMockClock(100), latencyMs: 0 });
+    const before = env.repository['storage']?.getItem('commitpot-demo-v1');
+    const hash = await env.repository.createPot({ token: MOCK_TOKEN_INFO.address, verifier: env.verifier, stakeAmount: 10_000_000n, registrationClose: 110, checkInOpen: 120, checkInClose: 220 });
+    const receipt = await env.repository.waitForTransaction(hash);
+    expect(receipt.operation).toBe('create');
+    expect(JSON.stringify(env.repository['storage']?.getItem('commitpot-demo-v1'))).not.toContain('signature');
+    const wrong = { account: receipt.from!, chainId: receipt.chainId!, core: receipt.coreAddress!, kind: 'join', potId: '1' } as const;
+    await expect(env.repository.waitForTransaction(hash, wrong)).resolves.toMatchObject({ status: 'failure', error: { code: 'RECEIPT_MISMATCH' } });
+    expect(before).toBeNull();
+  });
+
+  it('rechecks account after delays and stage callbacks before signing or committing', async () => {
+    const env = createMockPotEnvironment({ storage: new MemoryMockStorage(), clock: createMockClock(100), latencyMs: 1 });
+    const hash = await env.repository.createPot({ token: MOCK_TOKEN_INFO.address, verifier: env.verifier, stakeAmount: 1n, registrationClose: 110, checkInOpen: 120, checkInClose: 220 });
+    const id = (await env.repository.waitForTransaction(hash)).createdPotId!;
+    const rawBefore = env.repository['storage']?.getItem('commitpot-demo-v1');
+    env.repository.setAccount(env.verifier);
+    const verifierContext = { account: env.verifier, chainId: 31337, onStage(stage: string) { if (stage === 'signing') env.repository.setAccount(env.accounts[0]); } };
+    await expect(env.repository.signCheckIn({ potId: id, participant: env.accounts[0], nonce: 3n, deadline: 150 }, verifierContext)).rejects.toMatchObject({ code: 'ACCOUNT_CHANGED', stage: 'signing', submitted: false });
+    expect(env.repository['storage']?.getItem('commitpot-demo-v1')).toBe(rawBefore);
+    env.repository.setAccount(env.accounts[0]);
+    const context = { account: env.accounts[0], chainId: 31337, onStage(stage: string) { if (stage === 'submitting') env.repository.setAccount(env.accounts[1]); } };
+    await expect(env.repository.approveToken(1n, context)).rejects.toMatchObject({ code: 'ACCOUNT_CHANGED', stage: 'submitting', submitted: false });
+    expect(await env.repository.getTokenAllowance(env.accounts[0])).toBe(0n);
+  });
+
   it('preserves invalid saved bytes and fails atomic storage writes', async () => {
     const storage = new MemoryMockStorage(); storage.setItem('commitpot-demo-v1', '{bad');
     expect(() => new MockPotRepository({ storage })).toThrow(); expect(storage.getItem('commitpot-demo-v1')).toBe('{bad');

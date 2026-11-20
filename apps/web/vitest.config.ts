@@ -1,2 +1,9 @@
 import { defineConfig } from 'vitest/config';
-export default defineConfig({ test: { include: ['tests/domain/**/*.test.ts', 'tests/mock/**/*.test.ts', 'tests/qr/**/*.test.ts', 'tests/chain/**/*.test.ts'] } });
+
+export default defineConfig({
+  esbuild: { jsx: 'automatic' },
+  test: {
+    include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['tests/integration/**', 'tests/e2e/**'],
+  },
+});

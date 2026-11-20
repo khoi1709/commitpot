@@ -3,7 +3,7 @@ import { MAX_UINT256 } from './amounts';
 import type { Address, ParticipantStatus, PotConfig, PotSummary } from './types';
 
 export function normalizeAddress(value: unknown): Address {
-  if (typeof value !== 'string' || !/^0x[0-9a-fA-F]{40}$/.test(value) || /^0x0{40}$/i.test(value)) {
+  if (typeof value !== 'string' || !/^0x[0-9a-fA-F]{40}(?![\s\S])/.test(value) || /^0x0{40}(?![\s\S])/i.test(value)) {
     throw new DomainError('INVALID_ADDRESS', 'A nonzero wallet address is required');
   }
   return value.toLowerCase() as Address;

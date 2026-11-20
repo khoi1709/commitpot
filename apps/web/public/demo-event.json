@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "kind": "fictional-demo",
+  "chainId": 31337,
+  "coreAddress": "0x0000000000000000000000000000000000002000",
+  "potId": "1",
+  "locales": {
+    "en": {
+      "title": "Campus workshop attendance demo",
+      "description": "A curated fictional campus workshop for exploring attendance commitments. It represents no real pilot, person or private venue."
+    },
+    "vi": {
+      "title": "Minh họa điểm danh buổi học trong trường",
+      "description": "Buổi học trong trường được biên soạn để minh họa cam kết tham dự. Đây là tình huống hư cấu, không đại diện cho thí điểm thực tế, cá nhân hay địa điểm riêng tư."
+    }
+  }
+}

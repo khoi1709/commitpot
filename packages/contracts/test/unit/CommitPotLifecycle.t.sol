@@ -6,7 +6,7 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {CommitPot} from "../../src/CommitPot.sol";
 import {EIP712AttendanceVerifier} from "../../src/EIP712AttendanceVerifier.sol";
 import {EqualSplitStrategy} from "../../src/EqualSplitStrategy.sol";
-import {CheckInProof, PotConfig, PotState} from "../../src/PotTypes.sol";
+import {CheckInProof, PotConfig, PotState, NotEligible} from "../../src/PotTypes.sol";
 
 contract MockUSDC is ERC20 {
     constructor() ERC20("Mock USDC", "USDC") {}
@@ -51,7 +51,9 @@ contract CommitPotLifecycleTest is Test {
         _joinAll(potId);
 
         vm.warp(120);
-        for (uint256 i; i < 4; ++i) _checkIn(potId, i, i + 1);
+        for (uint256 i; i < 4; ++i) {
+            _checkIn(potId, i, i + 1);
+        }
 
         vm.warp(221);
         core.finalize(potId);
@@ -68,9 +70,13 @@ contract CommitPotLifecycleTest is Test {
             assertEq(token.balanceOf(wallets[i]), 12_500_000);
         }
 
+        uint256 noShowBalance = token.balanceOf(wallets[4]);
+        assertFalse(core.hasClaimed(potId, wallets[4]));
         vm.prank(vm.addr(999));
-        vm.expectRevert();
+        vm.expectRevert(abi.encodeWithSelector(NotEligible.selector, potId, wallets[4]));
         core.claim(potId, wallets[4]);
+        assertEq(token.balanceOf(wallets[4]), noShowBalance);
+        assertFalse(core.hasClaimed(potId, wallets[4]));
         assertEq(token.balanceOf(address(core)), 0);
     }
 
@@ -111,7 +117,9 @@ contract CommitPotLifecycleTest is Test {
         _joinAll(potId);
 
         vm.warp(120);
-        for (uint256 i; i < 3; ++i) _checkIn(potId, i, i + 1);
+        for (uint256 i; i < 3; ++i) {
+            _checkIn(potId, i, i + 1);
+        }
         vm.warp(221);
         core.finalize(potId);
 
@@ -133,7 +141,9 @@ contract CommitPotLifecycleTest is Test {
         uint256 potId = _createPot();
         _joinAll(potId);
         vm.warp(120);
-        for (uint256 i; i < wallets.length; ++i) _checkIn(potId, i, i + 1);
+        for (uint256 i; i < wallets.length; ++i) {
+            _checkIn(potId, i, i + 1);
+        }
         vm.warp(221);
         core.finalize(potId);
 
@@ -159,7 +169,9 @@ contract CommitPotLifecycleTest is Test {
     }
 
     function _joinAll(uint256 potId) internal {
-        for (uint256 i; i < wallets.length; ++i) _join(potId, i);
+        for (uint256 i; i < wallets.length; ++i) {
+            _join(potId, i);
+        }
     }
 
     function _join(uint256 potId, uint256 index) internal {
