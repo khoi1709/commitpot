@@ -4,19 +4,25 @@ An attendance commitment fund: fixed deposits, accountable human check-in, immut
 
 **Test tokens only. No real money.** The contract enforces financial rules; a named verifier remains trusted to confirm attendance. A QR identifies a wallet/pot, not physical presence or ownership. No admin withdrawal, mutable pot settings, yield, proprietary token, or claim of a formal security audit.
 
+## Fuji testnet verification
+
+The deployed CommitPot core is at [0xea655A1101d40175C4dd509da083F0b8696D9880](https://testnet.snowtrace.io/address/0xea655A1101d40175C4dd509da083F0b8696D9880) on Avalanche Fuji (chain ID 43113). One synthetic test-only wallet deposited and claimed 1 Test USDC in a verified on-chain lifecycle. This does not establish that the web app was exercised in a browser on Fuji, a public hosted frontend, real attendance, multiple-participant behavior, or a 12.5 Test USDC Fuji payout; no hosted frontend is available. See the [Fuji deployment and lifecycle evidence with its limits](<docs/PUBLICATION_STATUS.md#2-fuji-testnet-deployment-and-one-account-lifecycle>).
+
 ## Run the local demonstration
+
+Developer-only mock demo: **http://localhost:3100** works on the same developer machine only while `pnpm dev` is running; it is not a judge/public URL and does not make Fuji transactions.
 
 Requirements: Node 22+, pnpm 11.25.0. Install project-local dependencies, then start the app:
 
 ```powershell
 pnpm install --ignore-scripts
-Copy-Item apps/web/.env.example apps/web/.env.local
+if (!(Test-Path apps/web/.env.local)) { Copy-Item apps/web/.env.example apps/web/.env.local }
 pnpm dev
 ```
 
-Open **http://localhost:3100**. The default interface is clearly labelled **Local demonstration** with synthetic accounts and receipts, not a Fuji deployment. Choose EN/VI in the header. Load the five-person example to create five actual mock deposits, or create a custom pot. Demo wallets and phase controls are restricted to mock mode.
+The default interface is clearly labelled **Local demonstration** with synthetic accounts and receipts, not a Fuji deployment. Choose EN/VI in the header. Load the five-person example to create five simulated mock deposits, or create a custom pot. Demo wallets and phase controls are restricted to mock mode.
 
-For the standard example: move to check-in, select the verifier wallet, open the check-in desk, enter each participant's personal QR contents, attest physical presence, sign/record four participants, move past check-in, finalize, then select each eligible participant and claim 12.5 Test USDC. The fifth wallet is ineligible. If nobody checks in, joined participants reclaim their original deposit.
+For the standard example: move to check-in, select the verifier wallet, open the check-in desk, enter each participant's personal QR contents, attest physical presence, sign/record four participants, move past check-in, finalize, then select each eligible participant and claim 12.5 simulated Test USDC. The fifth wallet is ineligible. If nobody checks in, joined participants reclaim their original deposit.
 
 ## Development checks
 
@@ -31,7 +37,7 @@ pnpm.cmd test:integration
 
 ## Current verification
 
-The latest source-gate results and unfinished browser acceptance are summarized in [current publication and verification status](<docs/PUBLICATION_STATUS.md>). A GitHub source publication is not a deployment, hosted-CI pass, security audit, or complete product acceptance.
+The [publication and verification status](<docs/PUBLICATION_STATUS.md>) records local reproducibility results, the limited one-account Fuji lifecycle, and explicit evidence limits. It does not validate this checkout's uncommitted changes or claim a hosted frontend, hosted-CI pass, or formal security audit.
 
 Other useful local commands, when the matching toolchain is available:
 
@@ -61,16 +67,16 @@ pnpm.cmd test:integration
 
 The runner refuses to adopt a pre-existing listener and binds only its own Anvil on 127.0.0.1:18545 / chain 31337. It freshly compiles contracts offline, compares the compiler ABI, requires exactly the named integration case, and runs it with a process timeout. Output goes to a uniquely named `scratch/` run directory. It restores `COMMITPOT_LOCAL_RPC` and checks listener cleanup. The test deploys a chain-ID-restricted mock token and contracts, uses synthetic local wallets and real local EIP-712 transactions; no private key enters the public client.
 
-The saved browser-to-Anvil test is a historical fixture whose configuration is pinned to 127.0.0.1:8545; it is not the current 18545 runner or the same Anvil process. Its test-only injected wallet provider and fixture remain confined to test files, never the app. See the verification record and demo evidence ledger for the exact historical scope.
+The saved browser-to-Anvil test is a historical fixture whose configuration is pinned to 127.0.0.1:8545; it is not the current 18545 runner or the same Anvil process. Its test-only injected wallet provider and fixture remain confined to test files, never the app.
 
 The wallet-free proof page at `/verify` is read-only. An unconfigured deployment is shown as unconfigured; when a manifest is configured, the page compares it with observed deployment identity and displays configured receipt-reference status. A configured manifest comparison is not a rebuild or source/runtime parity certificate. A matching configured deployment is not a formal audit.
 
 ## On-chain configuration
 
-Copy [the example environment](<apps/web/.env.example>) only when you have a real deployment and wallet. Set `NEXT_PUBLIC_USE_MOCK=false`, an explicit `local` or `fuji` mode, the chain ID, public RPC, core and supported token addresses. Configuration is validated against chain/code/token decimals. A failure **never silently falls back to mock**. Fuji broadcasts and public hosting have not been authorized or performed.
+Copy [the example environment](<apps/web/.env.example>) only when you have an authorized deployment and wallet. Set `NEXT_PUBLIC_USE_MOCK=false`, an explicit `local` or `fuji` mode, the chain ID, public RPC, core and supported token addresses. Configuration is validated against chain/code/token decimals. A failure **never silently falls back to mock**. The [Fuji deployment and one-wallet synthetic lifecycle](<docs/PUBLICATION_STATUS.md#2-fuji-testnet-deployment-and-one-account-lifecycle>) are verified on chain; this does not mean the frontend is hosted or browser-tested on Fuji.
 
 - Local test: chain 31337 and loopback RPC only.
-- Intended Fuji: chain 43113 with HTTPS RPC and a separately verified Test USDC contract.
+- Fuji testnet: chain 43113, HTTPS RPC, the verified core, and Circle Fuji Test USDC as recorded in the [Fuji evidence](<docs/PUBLICATION_STATUS.md#2-fuji-testnet-deployment-and-one-account-lifecycle>).
 - Never put a private key or seed phrase in `NEXT_PUBLIC_*` or client code.
 - Camera scanning requires a supported secure context; manual QR contents input is always available. Scanning alone does not attest attendance.
 - Wrong-chain/user-rejected/pending/reverted/unknown outcomes are distinct. A returned transaction hash is not a confirmed result. Check the receipt before retrying.
@@ -93,5 +99,3 @@ No cancellation, verifier replacement, disputes, payout expiry, or unclaimed-fun
 - [Pitch, narration, and proposed consent protocol](<docs/demo/README.md>)
 - [Development verification findings](<docs/reviews/EXECUTION_FINDINGS.md>)
 - [Preserved original technical specification](<docs/sources/TECHSPEC.md>)
-
-The public source repository already existed at the historical baseline. This source publication does not publish a deployment or hosted service; no Fuji/mainnet operation, hosting, or hackathon submission is authorized or implied. The Ares project and original downloads remain unchanged.
