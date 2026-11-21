@@ -11,7 +11,8 @@ const outputDir = requireSafeOutput(args.output);
 const pageErrors = [];
 const consoleErrors = [];
 const httpErrors = [];
-const nonCriticalHttpErrors = [];
+const blockedRequests = [];
+const failedRequests = [];
 const steps = [];
 let browser;
 let context;
@@ -26,10 +27,29 @@ try {
   browser = await chromium.launch({ channel: 'msedge', headless: true });
   context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, locale: 'en-GB' });
   await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: baseUrl.origin });
+  await context.route('**/*', async route => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (url.origin !== baseUrl.origin) {
+      blockedRequests.push(request.url());
+      await route.abort('blockedbyclient');
+    } else if (request.method() === 'GET' && url.pathname === '/favicon.ico') {
+      await route.fulfill({ status: 204, contentType: 'image/x-icon', body: '' });
+    } else {
+      await route.continue();
+    }
+  });
   const page = await context.newPage();
   page.on('pageerror', error => pageErrors.push(error.message));
-  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
-  page.on('response', response => { if (response.status() >= 400) (response.status() === 404 && new URL(response.url()).pathname === '/favicon.ico' ? nonCriticalHttpErrors : httpErrors).push(`${response.status()} ${response.url()}`); });
+  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(`${message.text()} (${message.location().url})`); });
+  page.on('requestfailed', request => failedRequests.push(`${request.url()} (${request.failure()?.errorText ?? 'unknown failure'})`));
+  page.on('response', response => {
+    if (response.status() >= 400) {
+      const url = new URL(response.url());
+      if (response.status() === 404 && url.origin === baseUrl.origin && url.pathname === '/favicon.ico' && response.request().method() === 'GET') return;
+      httpErrors.push(`${response.status()} ${response.url()}`);
+    }
+  });
 
   await verifyNeutralReadOnlyRoutes(page, baseUrl);
   await page.goto(baseUrl.href, { waitUntil: 'networkidle', timeout: 120_000 });
@@ -239,20 +259,24 @@ try {
   await waitForHealthyPublicState(page);
   steps.push('390px settled EN/VI, 1440px settled EN, and wallet-free proof mobile EN/VI captures checked for overflow');
 
+  if (blockedRequests.length) throw new Error(`Blocked non-same-origin browser requests: ${blockedRequests.join('; ')}`);
   if (pageErrors.length) throw new Error(`Browser page errors: ${pageErrors.join('; ')}`);
   if (consoleErrors.length) throw new Error(`Browser console errors: ${consoleErrors.join('; ')}`);
   if (httpErrors.length) throw new Error(`Browser HTTP errors: ${httpErrors.join('; ')}`);
-  await writeReport('passed', { steps, pageErrors, consoleErrors, httpErrors, localOnly: true, isolatedMicrosoftEdgeContext: true, injectedWallet: false, productStateInjection: false, potId, financialFlow: { participants: 5, approvals: 5, deposits: 5, checkins: 4, claims: 4, exactEntitlementTestUsdc: '12.5', noShowIneligible: true, reloadClaims: 4, checkinInputs: 4 }, scenarios: ['wallet-free-verify-neutral', 'mock-create-approve-deposit-checkin-finalize-claim-reload', 'qr-edit-invalidates-presence', 'mock-wallet-switch-invalidates-candidate', 'healthy-poll-preserves-attestation', 'selected-pot-survives-wallet-disconnect', 'en-vi-390px-overflow-proof-captures'] });
+  await writeReport('passed', { steps, pageErrors, consoleErrors, httpErrors, blockedRequests, failedRequests, localOnly: true, isolatedMicrosoftEdgeContext: true, injectedWallet: false, productStateInjection: false, potId, financialFlow: { participants: 5, approvals: 5, deposits: 5, checkins: 4, claims: 4, exactEntitlementTestUsdc: '12.5', noShowIneligible: true, reloadClaims: 4, checkinInputs: 4 }, scenarios: ['wallet-free-verify-neutral', 'mock-create-approve-deposit-checkin-finalize-claim-reload', 'qr-edit-invalidates-presence', 'mock-wallet-switch-invalidates-candidate', 'healthy-poll-preserves-attestation', 'selected-pot-survives-wallet-disconnect', 'en-vi-390px-overflow-proof-captures'] });
   console.log(JSON.stringify({ status: 'passed', steps, output: relative(repoRoot, outputDir) }));
 } catch (cause) {
   const error = cause instanceof Error ? cause : new Error(String(cause));
   if (pageErrors.length) error.message += `\nBrowser page errors: ${pageErrors.join('; ')}`;
   if (consoleErrors.length) error.message += `\nBrowser console errors: ${consoleErrors.join('; ')}`;
+  if (httpErrors.length) error.message += `\nBrowser HTTP errors: ${httpErrors.join('; ')}`;
+  if (blockedRequests.length) error.message += `\nBlocked non-same-origin browser requests: ${blockedRequests.join('; ')}`;
+  if (failedRequests.length) error.message += `\nBrowser request failures: ${failedRequests.join('; ')}`;
   if (context && outputOwned) {
     const pages = context.pages();
     if (pages[0]) await pages[0].screenshot({ path: resolve(outputDir, 'failure.png'), fullPage: true }).catch(() => {});
   }
-  if (outputOwned) await writeReport('failed', { steps, pageErrors, consoleErrors, error: String(error), localOnly: true, isolatedMicrosoftEdgeContext: true }).catch(() => {});
+  if (outputOwned) await writeReport('failed', { steps, pageErrors, consoleErrors, httpErrors, blockedRequests, failedRequests, error: String(error), localOnly: true, isolatedMicrosoftEdgeContext: true }).catch(() => {});
   else console.error(JSON.stringify({ status: 'failed', error: String(error), report: 'not written because output directory was not safely acquired' }));
   throw error;
 } finally {
